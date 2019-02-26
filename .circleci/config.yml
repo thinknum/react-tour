@@ -1,0 +1,11 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:6
+    steps:
+      - checkout
+      # - restore-cache: *restore-cache
+      - run: yarn --no-progress
+      # - save-cache: *save-cache
+      - run: yarn jest

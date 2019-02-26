@@ -1,0 +1,33 @@
+.Overlay {
+  cursor: pointer;
+  // height: 1133px;
+  pointer-events: auto;
+  bottom: 0px;
+  left: 0px;
+  overflow: hidden;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.5);
+  mix-blend-mode: hard-light;
+}
+
+.TourModal {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  background-color: #fff;
+  border-radius: 4px;
+
+  visibility: hidden;
+  opacity: 0;
+  transform: translate(0, 10px);
+  transition: visibility 0.2s, opacity 0.2s, transform 0.5s;
+
+  &.isVisible {
+    visibility: visible;
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
