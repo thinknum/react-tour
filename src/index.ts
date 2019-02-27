@@ -6,6 +6,7 @@ export interface Step {
   title?: string;
   content?: string;
   position: TourModalPosition;
+  modalWidth?: number;
 }
 
 export enum TourModalPosition {

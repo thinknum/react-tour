@@ -35,7 +35,7 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
   // Constants
 
   private static readonly defaultStartDelay = 1000;
-  private static readonly defaultStepDelay = 1000;
+  private static readonly defaultStepDelay = 0;
 
   // State
 
@@ -90,6 +90,7 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
           content={step.content}
           onNextClicked={this.handleNext}
           onSkipClicked={this.handleSkip}
+          width={step.modalWidth}
         />
       </Portal>
     );

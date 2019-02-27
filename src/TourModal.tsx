@@ -30,6 +30,7 @@ interface IOuterProps {
   content?: string;
   onSkipClicked?: () => void;
   onNextClicked?: () => void;
+  width?: number;
 }
 
 /* Template
@@ -48,28 +49,36 @@ class Template extends React.PureComponent<ITemplateProps> {
         className={cx(styles.TourModal, {[styles.isVisible]: isVisible})}
         style={positionStyle}
       >
-        {title !== undefined ? (
-          <h3>{title}</h3>
-        ) : null}
+        <div className={styles.modalBody}>
+          {title !== undefined ? (
+            <h3>{title}</h3>
+          ) : null}
 
-        {content !== undefined ? (
-          <p>{content}</p>
-        ) : null}
+          {content !== undefined ? (
+            <p>{content}</p>
+          ) : null}
 
-        <div className={styles.actions}>
-          <Button
-            label={this.getButtonText(ButtonType.SKIP)}
-            color={"transparent"}
-            hoverColor={"transparent"}
-            textColor="#96a4b3"
-            textHoverColor="#798796"
-            onClick={this.handleSkipClick}
-            className={styles.skip}
-          />
-          <Button
-            label={this.getButtonText(hasNext ? ButtonType.NEXT : ButtonType.FINISH)}
-            onClick={this.handleNextClick}
-          />
+          <div className={styles.actions}>
+            <Button
+              label={this.getButtonText(ButtonType.SKIP)}
+              color={"transparent"}
+              hoverColor={"transparent"}
+              textColor="#96a4b3"
+              textHoverColor="#798796"
+              onClick={this.handleSkipClick}
+              className={styles.skip}
+            />
+            <Button
+              label={this.getButtonText(hasNext ? ButtonType.NEXT : ButtonType.FINISH)}
+              onClick={this.handleNextClick}
+            />
+          </div>
+        </div>
+
+        <div className={styles.arrow} style={this.getArrowStyle()}>
+          <svg xmlns='http://www.w3.org/2000/svg' width='16' height='17'>
+            <path fillRule='evenodd' fill='#FFF' d='M0.550,7.086 L7.566,0.015 L15.985,8.500 L7.566,16.985 L0.550,9.914 C-0.225,9.133 -0.225,7.867 0.550,7.086 Z'/>
+          </svg>
         </div>
       </div>
     );
@@ -96,15 +105,41 @@ class Template extends React.PureComponent<ITemplateProps> {
   // Helpers
 
   private getModalPosition(): React.CSSProperties {
-    const {targetRect, position} = this.props;
+    const {targetRect, position, width} = this.props;
 
-    const padding = 15;
+    const padding = 5;
+
+    let styles: React.CSSProperties = {};
+    if (width) {
+      styles.width = width;
+    }
 
     switch (position) {
       case TourModalPosition.RIGHT_TOP:
         return {
-          top: targetRect.top + targetRect.height + padding,
-          left: targetRect.left,
+          ...styles,
+          top: targetRect.top,
+          left: targetRect.left + targetRect.width + padding,
+          flexDirection: "row-reverse",
+        }
+      default:
+        break;
+    }
+
+    return styles;
+  }
+
+  private getArrowStyle(): React.CSSProperties {
+    const {targetRect, position} = this.props;
+
+    const arrowHalfHeight = 8;
+
+    switch (position) {
+      case TourModalPosition.RIGHT_TOP:
+        const arrowPadding = targetRect.height / 2 - arrowHalfHeight
+        return {
+          marginRight: -10,
+          paddingTop: arrowPadding,
         }
       default:
         break;
