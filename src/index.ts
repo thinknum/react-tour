@@ -5,7 +5,11 @@ export interface Step {
   target: string;
   title?: string;
   content?: string;
-  position: "bottom-left" | "bottom-center";
+  position: TourModalPosition;
 }
 
-export {Tour} from "./Tour";
+export enum TourModalPosition {
+  RIGHT_TOP = "right-top",
+}
+
+export {ReactTour} from "./ReactTour";

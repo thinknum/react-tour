@@ -1,6 +1,5 @@
 import * as React from "react";
 import { compose } from "recompose";
-import { getClientRect, getElement } from "./helpers";
 import * as styles from "./styles.scss";
 
 /* Outer props
@@ -9,6 +8,7 @@ import * as styles from "./styles.scss";
 interface IOuterProps {
   id?: string;
   target: string;
+  onClick?: () => void;
 }
 
 /* Template
@@ -18,17 +18,29 @@ type ITemplateProps = IOuterProps;
 
 class Template extends React.PureComponent<ITemplateProps> {
 
+  // Properties
+
   private resizeTimeout: any;
 
-  componentDidMount() {
+  // Lifecycle
+
+  public componentDidMount() {
     window.addEventListener('resize', this.handleResize);
   }
 
-  componentWillUnmount() {
+  public componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
   }
 
-  handleResize = () => {
+  public render() {
+    return (
+      <div className={styles.Overlay} onClick={this.handleOverlayClick}></div>
+    );
+  }
+
+  // Event handlers
+
+  private handleResize = () => {
     clearTimeout(this.resizeTimeout);
 
     this.resizeTimeout = setTimeout(() => {
@@ -37,42 +49,11 @@ class Template extends React.PureComponent<ITemplateProps> {
     }, 100);
   };
 
-
-  private stylesSpotlight = () => {
-    const {target} = this.props;
-
-    const spotlightPadding = 10;
-
-    const element = getElement(target);
-    if (!element) {
-      return {};
+  private handleOverlayClick = (ev: any) => {
+    const {onClick} = this.props;
+    if (onClick) {
+      onClick();
     }
-    const elementRect = getClientRect(element);
-
-    return {
-      borderRadius: 4,
-      position: 'absolute' as 'absolute',
-      backgroundColor: 'gray',
-      height: Math.round(elementRect.height + spotlightPadding * 2),
-      left: Math.round(elementRect.left - spotlightPadding),
-      opacity: 1,
-      // pointerEvents: spotlightClicks ? 'none' : 'auto',
-      top: Math.round(elementRect.top - spotlightPadding),
-      transition: 'opacity 0.2s',
-      width: Math.round(elementRect.width + spotlightPadding * 2),
-    };
-  }
-
-  render() {
-    const spotlight = (
-      <div className="tour__spotlight" style={this.stylesSpotlight()} />
-    );
-
-    return (
-      <div className={styles.Overlay} onClick={() => {}}>
-        {spotlight}
-      </div>
-    );
   }
 }
 
