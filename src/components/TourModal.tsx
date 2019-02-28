@@ -1,7 +1,7 @@
 import * as cx from "classnames";
 import * as React from "react";
 import { compose, setDisplayName } from "recompose";
-import { TourModalPosition, ButtonsTexts } from ".";
+import { ButtonsTexts, TourModalPosition } from "../index";
 import { Button } from "./Button";
 import * as styles from "./styles.scss";
 

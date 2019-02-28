@@ -1,7 +1,7 @@
+import { ButtonsTexts, Step } from "../";
 import { isEqualWith } from "lodash";
 import * as React from "react";
 import { compose, setDisplayName } from "recompose";
-import { Step, ButtonsTexts } from ".";
 import { getRectOfElementBySelector } from "./helpers";
 import { Portal } from "./Portal";
 import { TourModal } from "./TourModal";
@@ -27,6 +27,7 @@ interface ITemplateState {
   isActive: boolean;
   stepIndex: number;
   isModalVisible: boolean;
+  isWaitingForElement: boolean;
 }
 
 class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
@@ -42,6 +43,7 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
     isActive: false,
     stepIndex: 0,
     isModalVisible: false,
+    isWaitingForElement: false,
   }
 
   // Lifecycle
@@ -53,6 +55,7 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 
   public componentDidUpdate(prevProps: ITemplateProps) {
     const {steps} = this.props;
+    const {isWaitingForElement} = this.state;
 
     const stepComparator = function(stepA: Step, stepB: Step){
       return stepA.target === stepB.target;
@@ -64,13 +67,19 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
       console.log("Steps changed - start tour with delay");
       this.startTour();
     }
+
+    if (isWaitingForElement) {
+      this.setState({isWaitingForElement: false});
+      console.log("Resumed waiting element");
+      this.showStep();
+    }
   }
 
   public render() {
     const {steps, buttonsTexts} = this.props;
     const {stepIndex, isModalVisible} = this.state;
 
-    const step = steps[stepIndex];
+    const step = this.getCurrentStep();
     if (!step) {
       return null;
     }
@@ -78,6 +87,7 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 
     const rect = getRectOfElementBySelector(step.target);
     if (!rect) {
+      console.log("🛑 Element not found");
       return null;
     }
 
@@ -112,6 +122,19 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
   }
 
   private showStep(skipDelay?: boolean) {
+    const step = this.getCurrentStep();
+    if (!step) {
+      console.log("🛑 No step available");
+      return;
+    }
+
+    const rect = getRectOfElementBySelector(step.target);
+    if (!rect) {
+      console.log("🛑 Element not found");
+      this.setState({isWaitingForElement: true});
+      return;
+    }
+
     if (skipDelay) {
       console.log("Skip to visible");
       this.setState({isModalVisible: true});
@@ -160,6 +183,12 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
   }
 
   // Helpers
+
+  private getCurrentStep(): Step | undefined {
+    const {steps} = this.props;
+    const {stepIndex} = this.state;
+    return steps[stepIndex];
+  }
 }
 
 /* Compose

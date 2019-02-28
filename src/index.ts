@@ -21,4 +21,5 @@ export enum TourModalPosition {
   RIGHT_CENTER = "right-center",
 }
 
-export {ReactTour} from "./ReactTour";
+export {ReactTour} from "./components/ReactTour";
+export {withTourActionsDispatcher} from "./hoc/TourActionsDispatcher"
