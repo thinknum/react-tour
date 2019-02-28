@@ -1,27 +1,22 @@
 import * as cx from "classnames";
 import * as React from "react";
 import { compose, setDisplayName } from "recompose";
-import { TourModalPosition } from ".";
+import { TourModalPosition, ButtonsTexts } from ".";
 import { Button } from "./Button";
 import * as styles from "./styles.scss";
 
-export interface ButtonsTexts {
-  nextButtonText?: string;
-  skipButtonText?: string;
-  finishButtonText?: string;
-}
-
 enum ButtonType {
-  SKIP = 0,
-  NEXT = 1,
-  FINISH = 2
+  SKIP = "skip",
+  NEXT = "next",
+  FINISH = "finish"
 }
 
 /* Outer props
 -------------------------------------------------------------------------*/
 
 interface IOuterProps {
-  buttonsTexts?: ButtonsTexts;
+  globalButtonsTexts?: ButtonsTexts;
+  stepButtonsTexts?: ButtonsTexts;
   hasNext: boolean;
   targetRect: ClientRect,
   position: TourModalPosition,
@@ -46,7 +41,7 @@ class Template extends React.PureComponent<ITemplateProps> {
 
     return (
       <div
-        className={cx(styles.TourModal, {[styles.isVisible]: isVisible})}
+        className={cx(styles.TourModal, {[styles.isVisible]: isVisible, [styles.verticalCenter]: this.shouldUseVerticalCenter()})}
         style={positionStyle}
       >
         <div className={styles.modalBody}>
@@ -59,15 +54,17 @@ class Template extends React.PureComponent<ITemplateProps> {
           ) : null}
 
           <div className={styles.actions}>
-            <Button
-              label={this.getButtonText(ButtonType.SKIP)}
-              color={"transparent"}
-              hoverColor={"transparent"}
-              textColor="#96a4b3"
-              textHoverColor="#798796"
-              onClick={this.handleSkipClick}
-              className={styles.skip}
-            />
+            {hasNext && (
+              <Button
+                label={this.getButtonText(ButtonType.SKIP)}
+                color={"transparent"}
+                hoverColor={"transparent"}
+                textColor="#96a4b3"
+                textHoverColor="#798796"
+                onClick={this.handleSkipClick}
+                className={styles.skip}
+              />
+            )}
             <Button
               label={this.getButtonText(hasNext ? ButtonType.NEXT : ButtonType.FINISH)}
               onClick={this.handleNextClick}
@@ -104,6 +101,14 @@ class Template extends React.PureComponent<ITemplateProps> {
 
   // Helpers
 
+  private shouldUseVerticalCenter() {
+    const {position} = this.props;
+    if (position === TourModalPosition.RIGHT_CENTER) {
+      return true;
+    }
+    return false;
+  }
+
   private getModalPosition(): React.CSSProperties {
     const {targetRect, position, width} = this.props;
 
@@ -122,6 +127,14 @@ class Template extends React.PureComponent<ITemplateProps> {
           left: targetRect.left + targetRect.width + padding,
           flexDirection: "row-reverse",
         }
+      case TourModalPosition.RIGHT_CENTER:
+        return {
+          ...styles,
+          top: targetRect.top + targetRect.height / 2,
+          left: targetRect.left + targetRect.width + padding,
+          flexDirection: "row-reverse",
+          alignItems: "center",
+        }
       default:
         break;
     }
@@ -136,10 +149,14 @@ class Template extends React.PureComponent<ITemplateProps> {
 
     switch (position) {
       case TourModalPosition.RIGHT_TOP:
-        const arrowPadding = targetRect.height / 2 - arrowHalfHeight
+        const arrowPadding = targetRect.height / 2 - arrowHalfHeight;
         return {
           marginRight: -10,
           paddingTop: arrowPadding,
+        }
+      case TourModalPosition.RIGHT_CENTER:
+        return {
+          marginRight: -10,
         }
       default:
         break;
@@ -149,29 +166,20 @@ class Template extends React.PureComponent<ITemplateProps> {
   }
 
   private getButtonText(buttonType: ButtonType) {
-    const {buttonsTexts} = this.props;
+    const {globalButtonsTexts, stepButtonsTexts} = this.props;
 
-    switch (buttonType) {
-      case ButtonType.SKIP:
-        if (buttonsTexts && buttonsTexts.skipButtonText) {
-          return buttonsTexts.skipButtonText;
-        } else {
-          return "Skip";
-        }
-      case ButtonType.NEXT:
-        if (buttonsTexts && buttonsTexts.nextButtonText) {
-          return buttonsTexts.nextButtonText;
-        } else {
-          return "Next";
-        }
-      case ButtonType.SKIP:
-        if (buttonsTexts && buttonsTexts.finishButtonText) {
-          return buttonsTexts.finishButtonText;
-        } else {
-          return "Finish";
-        }
-      default:
-        return "";
+    const defaultButtonsTexts: ButtonsTexts = {
+      next: "Next",
+      skip: "Skip",
+      finish: "Finish",
+    }
+
+    if (stepButtonsTexts && stepButtonsTexts[buttonType]) {
+      return stepButtonsTexts[buttonType];
+    } else if (globalButtonsTexts && globalButtonsTexts[buttonType]) {
+      return globalButtonsTexts[buttonType];
+    } else {
+      return defaultButtonsTexts[buttonType];
     }
   }
 }

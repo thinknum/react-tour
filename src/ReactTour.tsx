@@ -1,11 +1,10 @@
-import { isEqual } from "lodash";
+import { isEqualWith } from "lodash";
 import * as React from "react";
 import { compose, setDisplayName } from "recompose";
-import { Step } from ".";
+import { Step, ButtonsTexts } from ".";
 import { getRectOfElementBySelector } from "./helpers";
-import { Overlay } from "./Overlay";
 import { Portal } from "./Portal";
-import { TourModal, ButtonsTexts } from "./TourModal";
+import { TourModal } from "./TourModal";
 
 /* Outer props
 -------------------------------------------------------------------------*/
@@ -35,7 +34,7 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
   // Constants
 
   private static readonly defaultStartDelay = 1000;
-  private static readonly defaultStepDelay = 0;
+  private static readonly defaultStepDelay = 500;
 
   // State
 
@@ -48,13 +47,20 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
   // Lifecycle
 
   public componentDidMount() {
+    console.log("Tour did mount");
     this.startTour();
   }
 
   public componentDidUpdate(prevProps: ITemplateProps) {
     const {steps} = this.props;
 
-    if (!isEqual(steps, prevProps.steps)) {
+    const stepComparator = function(stepA: Step, stepB: Step){
+      return stepA.target === stepB.target;
+    }
+
+    if (!isEqualWith(steps, prevProps.steps, stepComparator)) {
+      console.log("PREV: ", prevProps.steps);
+      console.log("STPS: ", steps);
       console.log("Steps changed - start tour with delay");
       this.startTour();
     }
@@ -77,11 +83,9 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 
     return (
       <Portal id="tour-portal">
-        {isModalVisible ? (
-          <Overlay target={step.target} onClick={this.handleNext} />
-        ) : null}
         <TourModal
-          buttonsTexts={buttonsTexts}
+          globalButtonsTexts={buttonsTexts}
+          stepButtonsTexts={step.buttonsTexts}
           hasNext={hasNext}
           targetRect={rect}
           position={step.position}
