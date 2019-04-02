@@ -1,12 +1,26 @@
 {
   "compilerOptions": {
+    // Support JSX in TypeScript files
     "jsx": "react",
+
+    // ES5, because we're building package with browser compatibility
     "target": "es5",
+
+    // ...
     "module": "commonjs",
+
+    // How to resolve non-relative imports
     "baseUrl": "./src",
+
+    // Generate into lib
     "outDir": "./lib",
-    "declaration": false,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-  }
+
+    // Enable all strict checks
+    "strict": true,
+
+    // Generate declaration files (so that module can be used with typings)
+    "declaration": true,
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }
