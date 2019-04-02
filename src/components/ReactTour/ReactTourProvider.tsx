@@ -1,7 +1,7 @@
-import {initialState, reducer} from "state/reactTour/reducer";
 import * as React from "react";
-import {createProvider} from "react-redux";
-import {applyMiddleware, compose, createStore, Middleware} from "redux";
+import { createProvider } from "react-redux";
+import { applyMiddleware, compose, createStore, Middleware } from "redux";
+import { initialState, reducer } from "state/reactTour/reducer";
 
 // Debugging setup
 
@@ -40,6 +40,6 @@ const Provider = createProvider(STORE_KEY);
 
 const store = createStore(reducer, initialState, composeEnhancers(applyMiddleware(...allMiddlewares)));
 
-const ReactTourProvider: React.SFC = (props) => <Provider store={store}>{props.children}</Provider>;
-
-export default ReactTourProvider;
+export const ReactTourProvider: React.SFC = (props) => (
+  <Provider store={store}>{props.children}</Provider>
+);

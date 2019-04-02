@@ -1,4 +1,4 @@
-import {ModalPositionSide, TourModalPosition} from "./types";
+import { ModalPositionSide, TourModalPosition } from "./types";
 
 export function getElementBySelector(selector: string): HTMLElement | undefined {
   if (typeof selector !== "string") {
