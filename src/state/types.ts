@@ -15,5 +15,4 @@ export enum ActionType {
 /* Action payloads
 -------------------------------------------------------------------------*/
 
-export interface ITestPayload {
-}
+export interface ITestPayload {}

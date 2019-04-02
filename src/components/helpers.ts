@@ -1,5 +1,5 @@
 export function getRectOfElementBySelector(selector: string) {
-  if (typeof selector !== 'string') {
+  if (typeof selector !== "string") {
     return undefined;
   }
 

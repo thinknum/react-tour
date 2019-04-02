@@ -1,6 +1,6 @@
 import * as React from "react";
-import * as ReactDOM from 'react-dom';
-import { compose } from "recompose";
+import * as ReactDOM from "react-dom";
+import {compose} from "recompose";
 
 /* Outer props
 -------------------------------------------------------------------------*/
@@ -16,13 +16,12 @@ interface IOuterProps {
 type ITemplateProps = IOuterProps;
 
 class Template extends React.PureComponent<ITemplateProps> {
-
   private node: HTMLElement;
 
   constructor(props: any) {
     super(props);
 
-    this.node = document.createElement('div');
+    this.node = document.createElement("div");
     if (props.id) {
       this.node.id = props.id;
     }
@@ -44,5 +43,4 @@ class Template extends React.PureComponent<ITemplateProps> {
 /* Compose
 -------------------------------------------------------------------------*/
 
-export const Portal = compose<ITemplateProps, IOuterProps>(
-)(Template);
+export const Portal = compose<ITemplateProps, IOuterProps>()(Template);

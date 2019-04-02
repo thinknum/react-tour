@@ -1,14 +1,14 @@
 import * as cx from "classnames";
 import * as React from "react";
-import { compose, setDisplayName } from "recompose";
-import { ButtonsTexts, TourModalPosition } from "../index";
-import { Button } from "./Button";
+import {compose, setDisplayName} from "recompose";
+import {ButtonsTexts, TourModalPosition} from "../index";
+import {Button} from "./Button";
 import * as styles from "./styles.scss";
 
 enum ButtonType {
   SKIP = "skip",
   NEXT = "next",
-  FINISH = "finish"
+  FINISH = "finish",
 }
 
 /* Outer props
@@ -18,8 +18,8 @@ interface IOuterProps {
   globalButtonsTexts?: ButtonsTexts;
   stepButtonsTexts?: ButtonsTexts;
   hasNext: boolean;
-  targetRect: ClientRect,
-  position: TourModalPosition,
+  targetRect: ClientRect;
+  position: TourModalPosition;
   isVisible: boolean;
   title?: string;
   content?: string;
@@ -34,24 +34,22 @@ interface IOuterProps {
 type ITemplateProps = IOuterProps;
 
 class Template extends React.PureComponent<ITemplateProps> {
-
   public render() {
     const {isVisible, title, content, hasNext} = this.props;
     const positionStyle = this.getModalPosition();
 
     return (
       <div
-        className={cx(styles.TourModal, {[styles.isVisible]: isVisible, [styles.verticalCenter]: this.shouldUseVerticalCenter()})}
+        className={cx(styles.TourModal, {
+          [styles.isVisible]: isVisible,
+          [styles.verticalCenter]: this.shouldUseVerticalCenter(),
+        })}
         style={positionStyle}
       >
         <div className={styles.modalBody}>
-          {title !== undefined ? (
-            <h3>{title}</h3>
-          ) : null}
+          {title !== undefined ? <h3>{title}</h3> : null}
 
-          {content !== undefined ? (
-            <p>{content}</p>
-          ) : null}
+          {content !== undefined ? <p>{content}</p> : null}
 
           <div className={styles.actions}>
             {hasNext && (
@@ -66,15 +64,21 @@ class Template extends React.PureComponent<ITemplateProps> {
               />
             )}
             <Button
-              label={this.getButtonText(hasNext ? ButtonType.NEXT : ButtonType.FINISH)}
+              label={this.getButtonText(
+                hasNext ? ButtonType.NEXT : ButtonType.FINISH,
+              )}
               onClick={this.handleNextClick}
             />
           </div>
         </div>
 
         <div className={styles.arrow} style={this.getArrowStyle()}>
-          <svg xmlns='http://www.w3.org/2000/svg' width='16' height='17'>
-            <path fillRule='evenodd' fill='#FFF' d='M0.550,7.086 L7.566,0.015 L15.985,8.500 L7.566,16.985 L0.550,9.914 C-0.225,9.133 -0.225,7.867 0.550,7.086 Z'/>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="17">
+            <path
+              fillRule="evenodd"
+              fill="#FFF"
+              d="M0.550,7.086 L7.566,0.015 L15.985,8.500 L7.566,16.985 L0.550,9.914 C-0.225,9.133 -0.225,7.867 0.550,7.086 Z"
+            />
           </svg>
         </div>
       </div>
@@ -89,7 +93,7 @@ class Template extends React.PureComponent<ITemplateProps> {
     if (onSkipClicked) {
       onSkipClicked();
     }
-  }
+  };
 
   private handleNextClick = () => {
     const {onNextClicked} = this.props;
@@ -97,7 +101,7 @@ class Template extends React.PureComponent<ITemplateProps> {
     if (onNextClicked) {
       onNextClicked();
     }
-  }
+  };
 
   // Helpers
 
@@ -126,7 +130,7 @@ class Template extends React.PureComponent<ITemplateProps> {
           top: targetRect.top,
           left: targetRect.left + targetRect.width + padding,
           flexDirection: "row-reverse",
-        }
+        };
       case TourModalPosition.RIGHT_CENTER:
         return {
           ...styles,
@@ -134,7 +138,7 @@ class Template extends React.PureComponent<ITemplateProps> {
           left: targetRect.left + targetRect.width + padding,
           flexDirection: "row-reverse",
           alignItems: "center",
-        }
+        };
       default:
         break;
     }
@@ -153,11 +157,11 @@ class Template extends React.PureComponent<ITemplateProps> {
         return {
           marginRight: -10,
           paddingTop: arrowPadding,
-        }
+        };
       case TourModalPosition.RIGHT_CENTER:
         return {
           marginRight: -10,
-        }
+        };
       default:
         break;
     }
@@ -172,7 +176,7 @@ class Template extends React.PureComponent<ITemplateProps> {
       next: "Next",
       skip: "Skip",
       finish: "Finish",
-    }
+    };
 
     if (stepButtonsTexts && stepButtonsTexts[buttonType]) {
       return stepButtonsTexts[buttonType];

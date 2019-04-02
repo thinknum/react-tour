@@ -1,10 +1,10 @@
-import { ButtonsTexts, Step } from "../";
-import { isEqualWith } from "lodash";
+import {ButtonsTexts, Step} from "../";
+import {isEqualWith} from "lodash";
 import * as React from "react";
-import { compose, setDisplayName } from "recompose";
-import { getRectOfElementBySelector } from "./helpers";
-import { Portal } from "./Portal";
-import { TourModal } from "./TourModal";
+import {compose, setDisplayName} from "recompose";
+import {getRectOfElementBySelector} from "./helpers";
+import {Portal} from "./Portal";
+import {TourModal} from "./TourModal";
 
 /* Outer props
 -------------------------------------------------------------------------*/
@@ -31,7 +31,6 @@ interface ITemplateState {
 }
 
 class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
-
   // Constants
 
   private static readonly defaultStartDelay = 1000;
@@ -44,7 +43,7 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
     stepIndex: 0,
     isModalVisible: false,
     isWaitingForElement: false,
-  }
+  };
 
   // Lifecycle
 
@@ -57,9 +56,9 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
     const {steps} = this.props;
     const {isWaitingForElement} = this.state;
 
-    const stepComparator = function(stepA: Step, stepB: Step){
+    const stepComparator = function(stepA: Step, stepB: Step) {
       return stepA.target === stepB.target;
-    }
+    };
 
     if (!isEqualWith(steps, prevProps.steps, stepComparator)) {
       console.log("PREV: ", prevProps.steps);
@@ -83,7 +82,7 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
     if (!step) {
       return null;
     }
-    const hasNext = !(stepIndex === (steps.length - 1));
+    const hasNext = !(stepIndex === steps.length - 1);
 
     const rect = getRectOfElementBySelector(step.target);
     if (!rect) {
@@ -114,7 +113,8 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 
   private startTour() {
     const {startDelay} = this.props;
-    const delay = startDelay !== undefined ? startDelay : Template.defaultStartDelay;
+    const delay =
+      startDelay !== undefined ? startDelay : Template.defaultStartDelay;
     setTimeout(() => {
       this.setState({isActive: true});
       this.showStep(true);
@@ -140,7 +140,8 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
       this.setState({isModalVisible: true});
     } else {
       const {nextStepDelay} = this.props;
-      const delay = nextStepDelay !== undefined ? nextStepDelay : Template.defaultStepDelay;
+      const delay =
+        nextStepDelay !== undefined ? nextStepDelay : Template.defaultStepDelay;
       setTimeout(() => {
         console.log("Delay to visible");
         this.setState({isModalVisible: true});
@@ -161,8 +162,8 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
         this.setState({stepIndex: newStepIdx});
         this.showStep();
       }
-    })
-  }
+    });
+  };
 
   private handleSkip = () => {
     const {onTourSkipped} = this.props;
@@ -170,8 +171,8 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 
     this.hideModal(() => {
       onTourSkipped();
-    })
-  }
+    });
+  };
 
   private hideModal(completion: () => void) {
     console.log("Hide modal");

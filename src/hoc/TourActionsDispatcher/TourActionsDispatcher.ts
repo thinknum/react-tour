@@ -1,7 +1,7 @@
-import { connect, DispatchProp } from "react-redux";
-import { compose, setDisplayName, withHandlers } from "recompose";
+import {connect, DispatchProp} from "react-redux";
+import {compose, setDisplayName, withHandlers} from "recompose";
 import * as Actions from "../../state/actions";
-import { IState as IReduxState } from "../../state/types";
+import {IState as IReduxState} from "../../state/types";
 import * as Types from "./types";
 
 const withStatusProps = connect<
@@ -29,5 +29,5 @@ export const withTourActionsDispatcher = compose<
 >(
   setDisplayName("TourActionsDispatcher"),
   withStatusProps,
-  withStatusHandlers
+  withStatusHandlers,
 );

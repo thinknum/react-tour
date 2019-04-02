@@ -22,4 +22,4 @@ export enum TourModalPosition {
 }
 
 export {ReactTour} from "./components/ReactTour";
-export {withTourActionsDispatcher} from "./hoc/TourActionsDispatcher"
+export {withTourActionsDispatcher} from "./hoc/TourActionsDispatcher";
