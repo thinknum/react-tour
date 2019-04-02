@@ -30,7 +30,9 @@
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.4.1"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@types/node": "^11.13.0"
+  },
   "resolutions": {},
   "peerDependencies": {
     "classnames": "^2",

@@ -6,6 +6,10 @@
     // ES5, because we're building package with browser compatibility
     "target": "es5",
 
+    // Add libraries to get some newer JS functionality
+    // (for example Sets, which are used in this library)
+    "lib": ["es2015", "dom"],
+
     // ...
     "module": "commonjs",
 
