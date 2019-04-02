@@ -11,13 +11,13 @@
     "lib": ["es2015", "dom"],
 
     // ...
-    "module": "commonjs",
+    "module": "es6",
 
     // How to resolve non-relative imports
     "baseUrl": "./src",
 
     // Generate into lib
-    "outDir": "./lib",
+    "outDir": "./dist",
 
     // Some strict checks
     "strict": true,
@@ -25,6 +25,7 @@
 
     // Generate declaration files (so that module can be used with typings)
     "declaration": true,
+    "declarationDir": "./dist"
   },
   "include": ["src"],
   "exclude": ["node_modules"]

@@ -1,4 +1,4 @@
-import * as cx from "classnames";
+import cx from "classnames";
 import {isEqual} from "lodash";
 import * as React from "react";
 import {connect} from "react-redux";

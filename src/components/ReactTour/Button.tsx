@@ -1,4 +1,4 @@
-import * as cx from "classnames";
+import cx from "classnames";
 import * as React from "react";
 import {compose, setDisplayName} from "recompose";
 import * as styles from "./styles.scss";
