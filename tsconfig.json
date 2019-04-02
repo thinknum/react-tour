@@ -19,8 +19,9 @@
     // Generate into lib
     "outDir": "./lib",
 
-    // Enable all strict checks
+    // Some strict checks
     "strict": true,
+    "strictFunctionTypes": false, // Won't work with our Reducers
 
     // Generate declaration files (so that module can be used with typings)
     "declaration": true,

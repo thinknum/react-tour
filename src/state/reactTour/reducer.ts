@@ -38,6 +38,7 @@ type Payload =
   | Types.ISetStepsPayload
   | Types.IAddEventPayload;
 
+
 export const reducer = handleActions<IState, Payload>(
   {
     [ActionType.SET_STEPS]: (state: IState, action: Action<Types.ISetStepsPayload>): IState => {
