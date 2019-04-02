@@ -1,4 +1,5 @@
 src/
 tsconfig.json
-webpack.config.js
+tslint.json
 yarn.lock
+.prettierrc
