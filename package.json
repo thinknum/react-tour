@@ -18,11 +18,11 @@
     "preversion": "yarn lint"
   },
   "devDependencies": {
-    "@types/classnames": "^2.2.7",
+    "@types/classnames": "^2",
     "@types/lodash": "^4.14.123",
-    "@types/react": "^16.8.10",
-    "@types/react-dom": "^16.8.3",
-    "@types/react-redux": "^7.0.6",
+    "@types/react": "^16",
+    "@types/react-dom": "^16",
+    "@types/react-redux": "^6",
     "@types/recompose": "^0.30.5",
     "@types/redux-actions": "^2.6.0",
     "prettier": "^1.16.4",
@@ -33,12 +33,12 @@
   "dependencies": {},
   "resolutions": {},
   "peerDependencies": {
-    "classnames": "*",
+    "classnames": "^2",
     "lodash": "*",
-    "react": "*",
-    "react-dom": "*",
-    "react-redux": "*",
-    "recompose": "*",
-    "redux-actions": "*"
+    "react": "^16",
+    "react-dom": "^16",
+    "react-redux": "^5",
+    "recompose": "^0.27",
+    "redux-actions": "^2.4"
   }
 }
