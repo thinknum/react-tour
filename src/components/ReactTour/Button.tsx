@@ -93,4 +93,6 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 /* Compose
 -------------------------------------------------------------------------*/
 
-export const Button: React.ComponentClass<IOuterProps> = compose<ITemplateProps, IOuterProps>(setDisplayName("Button"))(Template);
+export const Button: React.ComponentClass<IOuterProps> = compose<ITemplateProps, IOuterProps>(setDisplayName("Button"))(
+  Template,
+);

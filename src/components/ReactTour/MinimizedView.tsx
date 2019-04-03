@@ -151,4 +151,6 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 /* Compose
 -------------------------------------------------------------------------*/
 
-export const MinimizedView: React.ComponentClass<IOuterProps> = compose<ITemplateProps, IOuterProps>(setDisplayName("MinimizedView"))(Template);
+export const MinimizedView: React.ComponentClass<IOuterProps> = compose<ITemplateProps, IOuterProps>(
+  setDisplayName("MinimizedView"),
+)(Template);

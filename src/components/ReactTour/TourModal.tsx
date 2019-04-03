@@ -324,4 +324,6 @@ class Template extends React.PureComponent<ITemplateProps> {
 /* Compose
 -------------------------------------------------------------------------*/
 
-export const TourModal: React.ComponentClass<IOuterProps> = compose<ITemplateProps, IOuterProps>(setDisplayName("TourModal"))(Template);
+export const TourModal: React.ComponentClass<IOuterProps> = compose<ITemplateProps, IOuterProps>(
+  setDisplayName("TourModal"),
+)(Template);
