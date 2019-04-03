@@ -1,6 +1,6 @@
-import * as cx from "classnames";
+import cx from "classnames";
 import * as React from "react";
-import { compose, setDisplayName } from "recompose";
+import {compose, setDisplayName} from "recompose";
 import * as styles from "./styles.scss";
 
 export interface IOuterProps {
@@ -22,22 +22,14 @@ interface ITemplateState {
 type ITemplateProps = IOuterProps;
 
 class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
-
   public state: ITemplateState = {
     isHovered: false,
-  }
+  };
 
   public render() {
-    const {
-      label,
-      className,
-      onClick,
-    } = this.props;
+    const {label, className, onClick} = this.props;
 
-    const classNames = cx(
-      styles.Button,
-      className
-    );
+    const classNames = cx(styles.Button, className);
 
     return (
       <button
@@ -49,9 +41,7 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
         onMouseEnter={this.hoverOn}
         onMouseLeave={this.hoverOff}
       >
-        <span className={styles.label}>
-          {label}
-        </span>
+        <span className={styles.label}>{label}</span>
       </button>
     );
   }
@@ -60,11 +50,11 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 
   private hoverOn = () => {
     this.setState({isHovered: true});
-  }
+  };
 
   private hoverOff = () => {
     this.setState({isHovered: false});
-  }
+  };
 
   // Helpers
 
@@ -82,12 +72,12 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
       return {
         backgroundColor: bgHoverColor,
         color: txtHoverColor,
-      }
+      };
     } else {
       return {
         backgroundColor: bgColor,
         color: txtColor,
-      }
+      };
     }
   }
 
@@ -103,6 +93,4 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 /* Compose
 -------------------------------------------------------------------------*/
 
-export const Button = compose<ITemplateProps, IOuterProps>(
-  setDisplayName("Button"),
-)(Template);
+export const Button = compose<ITemplateProps, IOuterProps>(setDisplayName("Button"))(Template);

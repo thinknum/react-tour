@@ -1,25 +1,5 @@
-/* Generic
--------------------------------------------------------------------------*/
-
-export interface Step {
-  target: string;
-  title?: string;
-  content?: string;
-  position: TourModalPosition;
-  modalWidth?: number;
-  buttonsTexts?: ButtonsTexts;
-}
-
-export interface ButtonsTexts {
-  next?: string;
-  skip?: string;
-  finish?: string;
-}
-
-export enum TourModalPosition {
-  RIGHT_TOP = "right-top",
-  RIGHT_CENTER = "right-center",
-}
-
-export {ReactTour} from "./components/ReactTour";
-export {withTourActionsDispatcher} from "./hoc/TourActionsDispatcher"
+export {ReactTour} from "components/ReactTour/ReactTour";
+export {ReactTourProvider} from "components/ReactTour/ReactTourProvider";
+export {getElementBySelector} from "components/ReactTour/helpers";
+export {AutomatedEventType, TourModalPosition} from "components/ReactTour/types";
+export {ITourActionsHandlers, withTourActionsDispatcher} from "hoc/TourActionsDispatcher/TourActionsDispatcher";
