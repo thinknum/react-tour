@@ -27,6 +27,7 @@
     "@types/react-redux": "^6",
     "@types/recompose": "^0.30.5",
     "@types/redux-actions": "^2.6.0",
+    "@types/node": "^11.13.0",
     "awesome-typescript-loader": "^5.2.1",
     "node-sass": "^4.11.0",
     "postcss-modules": "^1.4.1",
@@ -39,17 +40,16 @@
     "tslint-config-prettier": "^1.18.0",
     "typescript": "^3.4.1"
   },
-  "dependencies": {
-    "@types/node": "^11.13.0"
-  },
   "resolutions": {},
   "peerDependencies": {
-    "classnames": "^2",
+    "classnames": "*",
     "lodash": "*",
-    "react": "^16",
-    "react-dom": "^16",
-    "react-redux": "^5",
-    "recompose": "^0.27",
-    "redux-actions": "^2.4"
+    "prop-types": "*",
+    "react": "*",
+    "react-dom": "*",
+    "react-redux": "*",
+    "recompose": "*",
+    "redux": "*",
+    "redux-actions": "*"
   }
 }

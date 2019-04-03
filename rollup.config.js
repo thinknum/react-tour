@@ -1,6 +1,6 @@
-import typescript from 'rollup-plugin-typescript2'
-import pkg from './package.json'
-import postcss from 'rollup-plugin-postcss'
+import typescript from 'rollup-plugin-typescript2';
+import pkg from './package.json';
+import postcss from 'rollup-plugin-postcss';
 
 export default {
   input: 'src/index.ts',
