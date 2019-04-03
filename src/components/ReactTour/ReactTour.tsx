@@ -373,7 +373,7 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 /* Compose
 -------------------------------------------------------------------------*/
 
-export const ReactTour = compose<ITemplateProps, IOuterProps>(
+export const ReactTour: React.ComponentClass<IOuterProps> = compose<ITemplateProps, IOuterProps>(
   withConnect,
   setDisplayName("ReactTour"),
 )(Template);

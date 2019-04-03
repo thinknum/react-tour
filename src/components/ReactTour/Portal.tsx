@@ -43,4 +43,4 @@ class Template extends React.PureComponent<ITemplateProps> {
 /* Compose
 -------------------------------------------------------------------------*/
 
-export const Portal = compose<ITemplateProps, IOuterProps>()(Template);
+export const Portal: React.ComponentClass<IOuterProps> = compose<ITemplateProps, IOuterProps>()(Template);

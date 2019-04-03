@@ -62,8 +62,8 @@ const withDecidedDispatcher = branch(
   (props: any) => {
     return props._tourStoreAvailable;
   },
-  realDispatcher,
-  fakeDispatcher,
+  realDispatcher as any,
+  fakeDispatcher as any,
 );
 
 export const withTourActionsDispatcher = compose(
