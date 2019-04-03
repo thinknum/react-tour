@@ -14,10 +14,7 @@
     "build": "rollup -c",
     "watch": "rollup -cw",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\"",
-    "lint": "tslint -p tsconfig.json",
-    "prepare": "yarn build",
-    "prepublishOnly": "yarn lint",
-    "preversion": "yarn lint"
+    "lint": "tslint -p tsconfig.json"
   },
   "devDependencies": {
     "@types/classnames": "^2",
