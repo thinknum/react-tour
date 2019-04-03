@@ -1,7 +1,7 @@
 export interface ReactStory {
   steps: ReactStoryStep[];
   starterElement: string;
-  waitForEvents?: TourEventKeys[];
+  waitForEvents?: string[];
   startDelay?: number;
   nextStepDelay?: number;
   buttonsTexts?: ButtonsTexts;
@@ -65,12 +65,12 @@ export interface TypingAutomatedEvent extends BaseAutomatedEvent {
 
 export interface WaitAutomatedEvent extends BaseAutomatedEvent {
   type: AutomatedEventType.WAIT;
-  waitFor: TourEventKeys;
+  waitFor: string;
 }
 
 export interface RemoveEventAutomatedEvent extends BaseAutomatedEvent {
   type: AutomatedEventType.REMOVE_EVENT_KEY;
-  keyToRemove: TourEventKeys;
+  keyToRemove: string;
 }
 
 export interface ScrollAutomatedEvent extends BaseAutomatedEvent {

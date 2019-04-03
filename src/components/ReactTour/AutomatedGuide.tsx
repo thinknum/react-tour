@@ -493,7 +493,7 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 /* Compose
 -------------------------------------------------------------------------*/
 
-export const AutomatedGuide = compose<ITemplateProps, IOuterProps>(
+export const AutomatedGuide: React.ComponentClass<IOuterProps> = compose<ITemplateProps, IOuterProps>(
   setDisplayName("AutomatedGuide"),
   withConnect,
 )(Template);

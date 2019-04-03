@@ -1,12 +1,12 @@
 import * as Actions from "state/reactTour/actions";
 import * as Selectors from "state/reactTour/selectors";
 import {IState as RectTourState, TourStatus} from "state/reactTour/types";
-import {isEqualWith} from "lodash";
+import {isEqualWith, isEqual} from "lodash";
 import * as React from "react";
 import {connect, DispatchProp} from "react-redux";
 import {compose, setDisplayName} from "recompose";
 import {AutomatedGuide} from "./AutomatedGuide";
-import {getElementBySelector, getRectOfElementBySelector} from "./helpers";
+import {getElementBySelector, getRectOfElementBySelector, getObjectFromClientRect} from "./helpers";
 import {MinimizedView} from "./MinimizedView";
 import {Portal} from "./Portal";
 import {STORE_KEY} from "./ReactTourProvider";
@@ -438,7 +438,7 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 /* Compose
 -------------------------------------------------------------------------*/
 
-export const ReactTour = compose<ITemplateProps, IOuterProps>(
+export const ReactTour: React.ComponentClass<IOuterProps> = compose<ITemplateProps, IOuterProps>(
   withConnect,
   setDisplayName("ReactTour"),
 )(Template);
