@@ -1,18 +1,23 @@
 import cx from "classnames";
 import {isEqual} from "lodash";
 import * as React from "react";
-import {connect} from "react-redux";
+import {connect, DispatchProp} from "react-redux";
 import {compose, setDisplayName} from "recompose";
+import * as ReactTourActions from "state/reactTour/actions";
 import * as Selectors from "state/reactTour/selectors";
 import {IState as RectTourState} from "state/reactTour/types";
-import {getElementBySelector, getRectOfElementBySelector} from "./helpers";
+import {getElementBySelector, getObjectFromClientRect, getRectOfElementBySelector} from "./helpers";
 import {STORE_KEY} from "./ReactTourProvider";
 import * as styles from "./styles.scss";
 import {
   AutomatedEvent,
   AutomatedEventType,
   ClickAutomatedEvent,
+  FakeClickAutomatedEvent,
+  PerformHandlerAutomatedEvent,
+  RemoveEventAutomatedEvent,
   ScrollAutomatedEvent,
+  ScrollToSide,
   TypingAutomatedEvent,
   WaitAutomatedEvent,
 } from "./types";
@@ -82,10 +87,12 @@ interface ITemplateState {
   waitEventTryAgainCounter: number;
 }
 
-type ITemplateProps = IOuterProps & IReduxProps;
+type ITemplateProps = IOuterProps & IReduxProps & DispatchProp<any>;
 
 class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
   // Properties
+
+  private timeouts: any[] = [];
 
   public state: ITemplateState = {
     currentIdx: 0,
@@ -93,8 +100,6 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
     isClickVisible: false,
     waitEventTryAgainCounter: 0,
   };
-
-  private timeouts: any[] = [];
 
   // Lifecycle
 
@@ -121,12 +126,12 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
     if (!rect) {
       return;
     }
-    const rectObj = this.getObjectFromClientRect(rect);
+    const rectObj = getObjectFromClientRect(rect);
     if (!cachedRect) {
       this.setState({cachedRect: rect});
       return;
     }
-    const cachedRectObj = this.getObjectFromClientRect(cachedRect);
+    const cachedRectObj = getObjectFromClientRect(cachedRect);
 
     if (!isEqual(rectObj, cachedRectObj)) {
       this.setState({cachedRect: rect});
@@ -155,23 +160,18 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
       width: cursorWidth,
       height: cursorHeight,
       top: rect.top + rect.height / 2,
-      left: rect.left + rect.width / 2 - cursorWidth / 2,
+      left: rect.left + rect.width / 2 - cursorWidth / 2 + 4,
     };
 
     const clickPositionStyles: React.CSSProperties = {
       top: rect.top + rect.height / 2,
-      left: rect.left + rect.width / 2 - 4,
+      left: rect.left + rect.width / 2,
     };
 
     return (
       <div className={styles.AutomatedGuide} onClick={onAutomationInterrupted}>
         {isClickVisible && <div className={styles.clickEffect} style={clickPositionStyles} />}
-        <div
-          className={cx(styles.guideCursor, {
-            [styles.isVisible]: isCursorVisible,
-          })}
-          style={cursorPositionStyles}
-        >
+        <div className={cx(styles.guideCursor, {[styles.isVisible]: isCursorVisible})} style={cursorPositionStyles}>
           <svg xmlns="http://www.w3.org/2000/svg" width="33" height="36">
             <defs>
               <filter filterUnits="userSpaceOnUse" id="a" x="0" y="0" width="33" height="36">
@@ -211,6 +211,9 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
       case AutomatedEventType.CLICK:
         this.simulateClickEvent(event);
         break;
+      case AutomatedEventType.FAKE_CLICK:
+        this.simulateFakeClickEvent(event);
+        break;
       case AutomatedEventType.TEXT_INPUT:
         this.simulateTypingEvent(event);
         break;
@@ -221,16 +224,26 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
       case AutomatedEventType.SCROLL:
         this.simulateScrollEvent(event);
         break;
+      case AutomatedEventType.REMOVE_EVENT_KEY:
+        this.simulateRemoveKeyEvent(event);
+        break;
+      case AutomatedEventType.PERFORM_HANDLER:
+        this.simulatePerformHandlerEvent(event);
+        break;
       default:
         return;
     }
   }
 
-  private async simulateHoverEvent(target: any) {
+  private async simulateHoverEvent(target: any, handler?: () => void) {
     this.toggleCursor(true);
 
     return this.sleep(200).then(() => {
-      target.classList.add("hover");
+      if (handler) {
+        handler();
+      } else {
+        target.classList.add("hover");
+      }
     });
   }
 
@@ -283,6 +296,34 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
     }
   }
 
+  private simulateFakeClickEvent(event: FakeClickAutomatedEvent) {
+    const hoverTarget: any = getElementBySelector(event.target);
+    const handler = event.handler !== undefined ? event.handler : () => {};
+
+    this.simulateHoverEvent(hoverTarget, event.hoverHandler)
+      .then(() => this.sleep(800))
+      .then(() => {
+        this.setState({isClickVisible: true});
+        handler();
+        return this.sleep(600);
+      })
+      .then(() => {
+        this.setState({isClickVisible: false});
+        return this.sleep(300);
+      })
+      .then(() => {
+        this.setState({cachedRect: undefined});
+        this.stepExecutionFinished();
+      });
+  }
+
+  private simulateRemoveKeyEvent(event: RemoveEventAutomatedEvent) {
+    const {dispatch} = this.props;
+    const {keyToRemove} = event;
+    dispatch(ReactTourActions.removeEvent({eventKey: keyToRemove}));
+    this.stepExecutionFinished();
+  }
+
   private simulateTypingEvent(event: TypingAutomatedEvent) {
     const target: any = getElementBySelector(event.target);
 
@@ -316,9 +357,23 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 
   private simulateScrollEvent(event: ScrollAutomatedEvent) {
     const list = getElementBySelector(event.target);
-    const scrollToTarget = getElementBySelector(event.scrollToTarget);
 
-    if (!list || !scrollToTarget) {
+    if (!list) {
+      this.stepExecutionFinished();
+      return;
+    }
+
+    if (event.scrollToTarget) {
+      this.scrollToTarget(list, event.scrollToTarget);
+    } else if (event.scrollToSide) {
+      this.scrollToSide(list, event.scrollToSide);
+    }
+  }
+
+  private scrollToTarget(list: HTMLElement, target: string) {
+    const scrollToTarget = getElementBySelector(target);
+
+    if (!scrollToTarget) {
       this.stepExecutionFinished();
       return;
     }
@@ -332,6 +387,20 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
     this.sleep(1000).then(() => {
       this.stepExecutionFinished();
     });
+  }
+
+  private scrollToSide(list: HTMLElement, side: ScrollToSide) {
+    // TODO: - Add all sides support later
+    const listHeight = list.getBoundingClientRect().height;
+    this.scrollTo(list, listHeight, 1000);
+    this.sleep(1000).then(() => {
+      this.stepExecutionFinished();
+    });
+  }
+
+  private simulatePerformHandlerEvent(event: PerformHandlerAutomatedEvent) {
+    event.handler();
+    this.stepExecutionFinished();
   }
 
   // Helpers
@@ -406,11 +475,6 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
     this.executeEvent(currentStep);
   }
 
-  private getObjectFromClientRect(rect: ClientRect) {
-    const {top, right, bottom, left, width, height} = rect;
-    return {top, right, bottom, left, width, height};
-  }
-
   // Timeouts
 
   private sleep(time: number) {
@@ -422,13 +486,14 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 
   private clearTimeouts() {
     this.timeouts.forEach((timeout) => clearTimeout(timeout));
+    console.log("Timeouts cleared");
   }
 }
 
 /* Compose
 -------------------------------------------------------------------------*/
 
-export const AutomatedGuide: React.ComponentClass<IOuterProps> = compose<ITemplateProps, IOuterProps>(
+export const AutomatedGuide = compose<ITemplateProps, IOuterProps>(
   setDisplayName("AutomatedGuide"),
   withConnect,
 )(Template);

@@ -30,6 +30,7 @@ interface IReduxProps {
   currentStep: ReactStoryStep;
   tourStatus: TourStatus;
   interactionKeys: Set<string>;
+  eventsKeys: Set<string>;
 }
 
 const mapStateToProps = (state: RectTourState, props: IOuterProps): IReduxProps => {
@@ -37,12 +38,14 @@ const mapStateToProps = (state: RectTourState, props: IOuterProps): IReduxProps 
   const currentStep = props.story.steps[currentStepIdx];
   const tourStatus = Selectors.getTourStatus(state);
   const interactionKeys = Selectors.getInteractionKeys(state);
+  const eventsKeys = Selectors.getEventKeys(state);
 
   return {
     currentStepIdx,
     currentStep,
     tourStatus,
     interactionKeys,
+    eventsKeys,
   };
 };
 
@@ -62,6 +65,8 @@ type ITemplateProps = IOuterProps & IReduxProps & DispatchProp<any>;
 
 interface ITemplateState {
   isWaitingForElement: boolean;
+  isWaitingForEvent: boolean;
+  cachedRect?: ClientRect;
 }
 
 class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
@@ -78,6 +83,7 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 
   public state: ITemplateState = {
     isWaitingForElement: false,
+    isWaitingForEvent: false,
   };
 
   // Lifecycle
@@ -88,6 +94,7 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
   }
 
   public componentWillUnmount() {
+    console.log("Unmount whole tour shit");
     window.removeEventListener("resize", this.handleResize);
   }
 
@@ -102,8 +109,9 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 
   public componentDidUpdate(prevProps: ITemplateProps) {
     const {story, tourStatus, currentStep, onTourFinished} = this.props;
-    const {isWaitingForElement} = this.state;
+    const {isWaitingForElement, isWaitingForEvent} = this.state;
     const steps = story.steps;
+    console.log("DID UPDATE");
 
     if (tourStatus === TourStatus.FINISH) {
       setTimeout(() => {
@@ -131,7 +139,14 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 
     if (isWaitingForElement) {
       this.setState({isWaitingForElement: false});
+      console.log("Calling show step");
       this.showStep();
+      return;
+    }
+
+    if (isWaitingForEvent) {
+      this.showStep();
+      return;
     }
 
     if (prevProps.tourStatus !== TourStatus.MODAL_VISIBLE && tourStatus === TourStatus.MODAL_VISIBLE) {
@@ -147,16 +162,24 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 
   public render() {
     const {story, currentStepIdx, currentStep, tourStatus} = this.props;
+    const {cachedRect} = this.state;
     const {steps, buttonsTexts} = story;
 
     if (!currentStep) {
       return null;
     }
 
-    const rect = getRectOfElementBySelector(currentStep.target);
+    let rect = getRectOfElementBySelector(currentStep.target);
     if (!rect) {
+      rect = cachedRect;
+    }
+    if (!rect) {
+      console.log("cele tatata");
       return null;
     }
+
+    console.log(tourStatus);
+    console.log(currentStep.automatedSteps);
 
     return (
       <Portal id="tour-portal">
@@ -200,6 +223,8 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
     const {story, dispatch} = this.props;
     const {startDelay, steps} = story;
     dispatch(Actions.setSteps({steps}));
+    const shouldWaitForEvents = (story.waitForEvents && story.waitForEvents.length > 0) || false;
+    this.setState({isWaitingForEvent: shouldWaitForEvents});
     const delay = startDelay !== undefined ? startDelay : Template.defaultStartDelay;
     setTimeout(() => {
       this.showStep(true);
@@ -207,6 +232,7 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
   }
 
   private showStep(skipDelay?: boolean) {
+    const {isWaitingForEvent, cachedRect} = this.state;
     const {currentStep} = this.props;
     if (!currentStep) {
       return;
@@ -214,9 +240,27 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 
     const rect = getRectOfElementBySelector(currentStep.target);
     if (!rect) {
+      console.log("Waiting for element");
       this.setState({isWaitingForElement: true});
       return;
     }
+
+    const rectObj = getObjectFromClientRect(rect);
+    if (!cachedRect) {
+      this.setState({cachedRect: rect});
+    } else {
+      const cachedRectObj = getObjectFromClientRect(cachedRect);
+
+      if (!isEqual(rectObj, cachedRectObj)) {
+        this.setState({cachedRect: rect});
+      }
+    }
+
+    if (isWaitingForEvent && !this.areWaitingEventsFullfilled()) {
+      console.log("Waiting for event");
+      return;
+    }
+    this.setState({isWaitingForEvent: false});
 
     if (skipDelay) {
       this.showModal();
@@ -335,6 +379,27 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 
   // Helpers
 
+  private areWaitingEventsFullfilled() {
+    const {story, eventsKeys} = this.props;
+    const waitForEvents = story.waitForEvents;
+    if (!waitForEvents || waitForEvents.length == 0) {
+      console.log("🛑 1");
+      return true;
+    }
+
+    for (let idx = 0; idx < waitForEvents.length; idx++) {
+      const waitEventKey = waitForEvents[idx];
+      if (!eventsKeys.has(waitEventKey)) {
+        console.log("🛑 2");
+        console.log(eventsKeys);
+        console.log(waitEventKey);
+        return false;
+      }
+    }
+    console.log("🛑 3");
+    return true;
+  }
+
   private hasNextStep() {
     const {currentStepIdx, story} = this.props;
     const {steps} = story;
@@ -373,7 +438,7 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 /* Compose
 -------------------------------------------------------------------------*/
 
-export const ReactTour: React.ComponentClass<IOuterProps> = compose<ITemplateProps, IOuterProps>(
+export const ReactTour = compose<ITemplateProps, IOuterProps>(
   withConnect,
   setDisplayName("ReactTour"),
 )(Template);

@@ -5,6 +5,7 @@ export const setSteps = createAction<Types.ISetStepsPayload>(Types.ActionType.SE
 export const setStepIndex = createAction<Types.ISetStepIdxPayload>(Types.ActionType.SET_STEP_IDX);
 export const addInteraction = createAction<Types.IAddInteractionPayload>(Types.ActionType.ADD_INTERACTION);
 export const addEvent = createAction<Types.IAddEventPayload>(Types.ActionType.ADD_EVENT);
+export const removeEvent = createAction<Types.IRemoveEventPayload>(Types.ActionType.REMOVE_EVENT);
 export const minimalize = createAction<Types.IEmptyPayload>(Types.ActionType.MINIMALIZE);
 export const show = createAction<Types.IEmptyPayload>(Types.ActionType.SHOW);
 export const hide = createAction<Types.IEmptyPayload>(Types.ActionType.HIDE);

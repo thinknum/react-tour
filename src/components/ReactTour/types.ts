@@ -1,6 +1,7 @@
 export interface ReactStory {
   steps: ReactStoryStep[];
   starterElement: string;
+  waitForEvents?: TourEventKeys[];
   startDelay?: number;
   nextStepDelay?: number;
   buttonsTexts?: ButtonsTexts;
@@ -25,12 +26,26 @@ export interface ReactStoryStep {
 
 export enum AutomatedEventType {
   CLICK = "click",
+  FAKE_CLICK = "fake-click",
   TEXT_INPUT = "text-input",
   WAIT = "wait",
   SCROLL = "scroll",
+  REMOVE_EVENT_KEY = "remove-event",
+  PERFORM_HANDLER = "perform-handler",
 }
 
-export type AutomatedEvent = ClickAutomatedEvent | TypingAutomatedEvent | WaitAutomatedEvent | ScrollAutomatedEvent;
+export enum ScrollToSide {
+  BOTTOM = "bottom",
+}
+
+export type AutomatedEvent =
+  | ClickAutomatedEvent
+  | FakeClickAutomatedEvent
+  | TypingAutomatedEvent
+  | WaitAutomatedEvent
+  | ScrollAutomatedEvent
+  | RemoveEventAutomatedEvent
+  | PerformHandlerAutomatedEvent;
 
 export interface BaseAutomatedEvent {
   type: AutomatedEventType;
@@ -50,12 +65,29 @@ export interface TypingAutomatedEvent extends BaseAutomatedEvent {
 
 export interface WaitAutomatedEvent extends BaseAutomatedEvent {
   type: AutomatedEventType.WAIT;
-  waitFor: string; // TourEventKeys
+  waitFor: TourEventKeys;
+}
+
+export interface RemoveEventAutomatedEvent extends BaseAutomatedEvent {
+  type: AutomatedEventType.REMOVE_EVENT_KEY;
+  keyToRemove: TourEventKeys;
 }
 
 export interface ScrollAutomatedEvent extends BaseAutomatedEvent {
   type: AutomatedEventType.SCROLL;
-  scrollToTarget: string;
+  scrollToTarget?: string;
+  scrollToSide?: ScrollToSide;
+}
+
+export interface PerformHandlerAutomatedEvent extends BaseAutomatedEvent {
+  type: AutomatedEventType.PERFORM_HANDLER;
+  handler: () => void;
+}
+
+export interface FakeClickAutomatedEvent extends BaseAutomatedEvent {
+  type: AutomatedEventType.FAKE_CLICK;
+  handler?: () => void;
+  hoverHandler?: () => void;
 }
 
 export interface ButtonsTexts {

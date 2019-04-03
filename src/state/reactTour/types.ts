@@ -32,6 +32,7 @@ export enum ActionType {
   SET_STEP_IDX = "React Tour - Set step index",
   ADD_INTERACTION = "React Tour - Add interaction",
   ADD_EVENT = "React Tour - Add Event",
+  REMOVE_EVENT = "React Tour - Remove Event",
   MINIMALIZE = "React Tour - Minimalize",
   SHOW = "React Tour - Show",
   HIDE = "React Tour - Hide",
@@ -56,6 +57,10 @@ export interface IAddInteractionPayload {
 }
 
 export interface IAddEventPayload {
+  eventKey: string;
+}
+
+export interface IRemoveEventPayload {
   eventKey: string;
 }
 

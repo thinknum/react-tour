@@ -88,6 +88,17 @@ export const reducer = handleActions<IState, Payload>(
       };
     },
 
+    [ActionType.REMOVE_EVENT]: (state: IState, action: Action<Types.IRemoveEventPayload>): IState => {
+      const keyToRemove = action.payload!.eventKey;
+      const newSet = new Set(state.eventKeys);
+      newSet.delete(keyToRemove);
+
+      return {
+        ...state,
+        eventKeys: newSet,
+      };
+    },
+
     [ActionType.MINIMALIZE]: (state: IState, action: Action<Types.IEmptyPayload>): IState => {
       if (state.status === TourStatus.INTERACTION_STARTED || state.status === TourStatus.INTERACTION_FINISHED) {
         return state;

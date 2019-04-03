@@ -34,3 +34,8 @@ export function getPositionSide(position: TourModalPosition): ModalPositionSide 
       return ModalPositionSide.BOTTOM;
   }
 }
+
+export function getObjectFromClientRect(rect: ClientRect) {
+  const {top, right, bottom, left, width, height} = rect;
+  return {top, right, bottom, left, width, height};
+}
