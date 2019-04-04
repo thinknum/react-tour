@@ -6,7 +6,7 @@ import * as React from "react";
 import {connect, DispatchProp} from "react-redux";
 import {compose, setDisplayName} from "recompose";
 import {AutomatedGuide} from "./AutomatedGuide";
-import {getElementBySelector, getRectOfElementBySelector, getObjectFromClientRect} from "./helpers";
+import {getElementBySelector, getRectOfElementBySelector, getObjectFromClientRect, areStepsEqual} from "./helpers";
 import {MinimizedView} from "./MinimizedView";
 import {Portal} from "./Portal";
 import {STORE_KEY} from "./ReactTourProvider";
@@ -120,11 +120,7 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
       return;
     }
 
-    const stepComparator = function(stepA: ReactStoryStep, stepB: ReactStoryStep) {
-      return stepA.target === stepB.target;
-    };
-
-    if (!isEqualWith(steps, prevProps.story.steps, stepComparator)) {
+    if (!isEqualWith(steps, prevProps.story.steps, areStepsEqual)) {
       this.startTour();
     }
 

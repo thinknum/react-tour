@@ -30,12 +30,11 @@
   box-sizing: border-box;
   display: flex;
 
-  visibility: hidden;
   opacity: 0;
-  transition: visibility 0.2s, opacity 0.3s, transform 0.5s;
+  transition: opacity 0.3s ease-out, transform 0.5s ease-out;
+  will-change: opacity, transform;
 
   &.isVisible {
-    visibility: visible;
     opacity: 1;
   }
 

@@ -1,4 +1,4 @@
-import {ModalPositionSide, TourModalPosition} from "./types";
+import {ModalPositionSide, TourModalPosition, ReactStoryStep} from "./types";
 
 export function getElementBySelector(selector: string): HTMLElement | undefined {
   if (typeof selector !== "string") {
@@ -39,3 +39,7 @@ export function getObjectFromClientRect(rect: ClientRect) {
   const {top, right, bottom, left, width, height} = rect;
   return {top, right, bottom, left, width, height};
 }
+
+export const areStepsEqual = function(stepA: ReactStoryStep, stepB: ReactStoryStep) {
+  return stepA.target === stepB.target;
+};

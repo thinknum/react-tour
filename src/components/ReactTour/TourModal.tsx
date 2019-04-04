@@ -226,23 +226,23 @@ class Template extends React.PureComponent<ITemplateProps> {
     switch (position) {
       case TourModalPosition.RIGHT_TOP:
         return isVisible
-          ? "translate(0, 0)"
+          ? "translate(0, 0) perspective(0px)"
           : `translate(${translation}px, 0) perspective(${perspective}px) rotateY(${rotation}deg)`;
       case TourModalPosition.RIGHT_CENTER:
         return isVisible
-          ? "translate(0, -50%)"
+          ? `translate(0, -50%) perspective(0px)`
           : `translate(${translation}px, -50%) perspective(${perspective}px) rotateY(${rotation}deg)`;
       case TourModalPosition.LEFT_TOP:
         return isVisible
-          ? "translate(0, 0)"
+          ? "translate(0, 0) perspective(0px)"
           : `translate(-${translation}px, 0) perspective(${perspective}px) rotateY(-${rotation}deg)`;
       case TourModalPosition.LEFT_CENTER:
         return isVisible
-          ? "translate(0, -50%)"
+          ? "translate(0, -50%) perspective(0px)"
           : `translate(-${translation}px, -50%) perspective(${perspective}px) rotateY(-${rotation}deg)`;
       case TourModalPosition.BOTTOM_CENTER:
         return isVisible
-          ? "translate(-50%, 0)"
+          ? "translate(-50%, 0) perspective(0px)"
           : `translate(-50%, ${translation}px) perspective(${perspective}px) rotateX(-${rotation}deg)`;
       default:
         return "";
