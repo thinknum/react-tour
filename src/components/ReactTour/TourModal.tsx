@@ -1,10 +1,10 @@
 import cx from "classnames";
 import * as React from "react";
-import { compose, setDisplayName } from "recompose";
-import { Button } from "./Button";
-import { getPositionSide } from "./helpers";
+import {compose, setDisplayName} from "recompose";
+import {Button} from "./Button";
+import {getPositionSide} from "./helpers";
 import * as styles from "./styles.scss";
-import { ButtonsTexts, ModalPositionSide, ReactStoryStep, TourModalPosition } from "./types";
+import {ButtonsTexts, ModalPositionSide, ReactStoryStep, TourModalPosition} from "./types";
 
 enum ButtonType {
   SKIP = "skip",
@@ -176,7 +176,7 @@ class Template extends React.PureComponent<ITemplateProps> {
           ...modalStyles,
           top: targetRect.top,
         };
-        case TourModalPosition.LEFT_BOTTOM:
+      case TourModalPosition.LEFT_BOTTOM:
         return {
           ...modalStyles,
           top: targetRect.top + targetRect.height,
