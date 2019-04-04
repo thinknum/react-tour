@@ -1,10 +1,10 @@
 import cx from "classnames";
 import * as React from "react";
-import {compose, setDisplayName} from "recompose";
-import {Button} from "./Button";
-import {getPositionSide} from "./helpers";
+import { compose, setDisplayName } from "recompose";
+import { Button } from "./Button";
+import { getPositionSide } from "./helpers";
 import * as styles from "./styles.scss";
-import {ButtonsTexts, ModalPositionSide, ReactStoryStep, TourModalPosition} from "./types";
+import { ButtonsTexts, ModalPositionSide, ReactStoryStep, TourModalPosition } from "./types";
 
 enum ButtonType {
   SKIP = "skip",
@@ -176,6 +176,12 @@ class Template extends React.PureComponent<ITemplateProps> {
           ...modalStyles,
           top: targetRect.top,
         };
+        case TourModalPosition.LEFT_BOTTOM:
+        return {
+          ...modalStyles,
+          top: targetRect.top + targetRect.height,
+          alignItems: "flex-end",
+        };
       case TourModalPosition.LEFT_CENTER:
         return {
           ...modalStyles,
@@ -236,6 +242,10 @@ class Template extends React.PureComponent<ITemplateProps> {
         return isVisible
           ? "translate(0, 0) perspective(0px)"
           : `translate(-${translation}px, 0) perspective(${perspective}px) rotateY(-${rotation}deg)`;
+      case TourModalPosition.LEFT_BOTTOM:
+        return isVisible
+          ? "translate(0, -100%) perspective(0px)"
+          : `translate(-${translation}px, -100%) perspective(${perspective}px) rotateY(-${rotation}deg)`;
       case TourModalPosition.LEFT_CENTER:
         return isVisible
           ? "translate(0, -50%) perspective(0px)"
@@ -271,6 +281,8 @@ class Template extends React.PureComponent<ITemplateProps> {
           paddingTop: targetRect.height / 2 - arrowHalfHeight,
         };
       case TourModalPosition.LEFT_CENTER:
+        return commonStyle;
+      case TourModalPosition.LEFT_BOTTOM:
         return commonStyle;
       case TourModalPosition.BOTTOM_CENTER:
         return commonStyle;

@@ -100,6 +100,7 @@ export enum TourModalPosition {
   RIGHT_TOP = "right-top",
   RIGHT_CENTER = "right-center",
   LEFT_TOP = "left-top",
+  LEFT_BOTTOM = "left-bottom",
   LEFT_CENTER = "left-center",
   BOTTOM_CENTER = "bottom-center",
 }
