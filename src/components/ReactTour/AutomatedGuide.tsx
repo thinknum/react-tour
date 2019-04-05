@@ -284,7 +284,7 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
     if (eventsKeys.has(waitingFor)) {
       this.stepExecutionFinished();
     } else {
-      const maxTryAgainCount = 15;
+      const maxTryAgainCount = 60;
       if (waitEventTryAgainCounter > maxTryAgainCount) {
         onAutomationInterrupted();
         return;
@@ -486,7 +486,6 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 
   private clearTimeouts() {
     this.timeouts.forEach((timeout) => clearTimeout(timeout));
-    console.log("Timeouts cleared");
   }
 }
 

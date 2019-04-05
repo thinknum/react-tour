@@ -166,6 +166,12 @@ class Template extends React.PureComponent<ITemplateProps> {
           ...modalStyles,
           top: targetRect.top,
         };
+      case TourModalPosition.RIGHT_BOTTOM:
+        return {
+          ...modalStyles,
+          top: targetRect.top + targetRect.height,
+          alignItems: "flex-end",
+        };
       case TourModalPosition.RIGHT_CENTER:
         return {
           ...modalStyles,
@@ -234,6 +240,10 @@ class Template extends React.PureComponent<ITemplateProps> {
         return isVisible
           ? "translate(0, 0) perspective(0px)"
           : `translate(${translation}px, 0) perspective(${perspective}px) rotateY(${rotation}deg)`;
+      case TourModalPosition.RIGHT_BOTTOM:
+        return isVisible
+          ? "translate(0, -100%) perspective(0px)"
+          : `translate(-${translation}px, -100%) perspective(${perspective}px) rotateY(${rotation}deg)`;
       case TourModalPosition.RIGHT_CENTER:
         return isVisible
           ? `translate(0, -50%) perspective(0px)`
@@ -274,6 +284,7 @@ class Template extends React.PureComponent<ITemplateProps> {
           paddingTop: arrowPadding,
         };
       case TourModalPosition.RIGHT_CENTER:
+      case TourModalPosition.RIGHT_BOTTOM:
         return commonStyle;
       case TourModalPosition.LEFT_TOP:
         return {
@@ -281,7 +292,6 @@ class Template extends React.PureComponent<ITemplateProps> {
           paddingTop: targetRect.height / 2 - arrowHalfHeight,
         };
       case TourModalPosition.LEFT_CENTER:
-        return commonStyle;
       case TourModalPosition.LEFT_BOTTOM:
         return commonStyle;
       case TourModalPosition.BOTTOM_CENTER:

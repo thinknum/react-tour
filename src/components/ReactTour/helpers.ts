@@ -26,6 +26,7 @@ export function getPositionSide(position: TourModalPosition): ModalPositionSide 
   switch (position) {
     case TourModalPosition.RIGHT_CENTER:
     case TourModalPosition.RIGHT_TOP:
+    case TourModalPosition.RIGHT_BOTTOM:
       return ModalPositionSide.RIGHT;
     case TourModalPosition.LEFT_TOP:
     case TourModalPosition.LEFT_CENTER:

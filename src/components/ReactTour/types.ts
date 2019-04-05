@@ -98,6 +98,7 @@ export interface ButtonsTexts {
 
 export enum TourModalPosition {
   RIGHT_TOP = "right-top",
+  RIGHT_BOTTOM = "right-bottom",
   RIGHT_CENTER = "right-center",
   LEFT_TOP = "left-top",
   LEFT_BOTTOM = "left-bottom",
