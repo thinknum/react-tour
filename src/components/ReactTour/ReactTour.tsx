@@ -94,7 +94,6 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
   }
 
   public componentWillUnmount() {
-    console.log("Unmount whole tour shit");
     window.removeEventListener("resize", this.handleResize);
   }
 
@@ -111,7 +110,6 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
     const {story, tourStatus, currentStep, onTourFinished} = this.props;
     const {isWaitingForElement, isWaitingForEvent} = this.state;
     const steps = story.steps;
-    console.log("DID UPDATE");
 
     if (tourStatus === TourStatus.FINISH) {
       setTimeout(() => {
@@ -135,7 +133,6 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 
     if (isWaitingForElement) {
       this.setState({isWaitingForElement: false});
-      console.log("Calling show step");
       this.showStep();
       return;
     }
@@ -170,12 +167,8 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
       rect = cachedRect;
     }
     if (!rect) {
-      console.log("cele tatata");
       return null;
     }
-
-    console.log(tourStatus);
-    console.log(currentStep.automatedSteps);
 
     return (
       <Portal id="tour-portal">
@@ -236,7 +229,6 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 
     const rect = getRectOfElementBySelector(currentStep.target);
     if (!rect) {
-      console.log("Waiting for element");
       this.setState({isWaitingForElement: true});
       return;
     }
@@ -253,7 +245,6 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
     }
 
     if (isWaitingForEvent && !this.areWaitingEventsFullfilled()) {
-      console.log("Waiting for event");
       return;
     }
     this.setState({isWaitingForEvent: false});
@@ -379,20 +370,15 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
     const {story, eventsKeys} = this.props;
     const waitForEvents = story.waitForEvents;
     if (!waitForEvents || waitForEvents.length == 0) {
-      console.log("🛑 1");
       return true;
     }
 
     for (let idx = 0; idx < waitForEvents.length; idx++) {
       const waitEventKey = waitForEvents[idx];
       if (!eventsKeys.has(waitEventKey)) {
-        console.log("🛑 2");
-        console.log(eventsKeys);
-        console.log(waitEventKey);
         return false;
       }
     }
-    console.log("🛑 3");
     return true;
   }
 
