@@ -309,6 +309,7 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
       })
       .then(() => {
         this.setState({isClickVisible: false});
+        this.removeHoverEvent(hoverTarget);
         return this.sleep(300);
       })
       .then(() => {
