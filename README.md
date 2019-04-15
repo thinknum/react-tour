@@ -20,6 +20,24 @@ Or Yarn:
 
 `yarn add @thinknum/react-tour`.
 
+**Note: React Tour currently requires `react-redux` at version 6, as it relies on custom stores using store key. (See [this issue](https://github.com/reduxjs/react-redux/issues/1132) in react-redux.) We're working on resolving this, pull-requests are welcome.**
+
+# Adding tour to your project
+
+1. Wrap your app in `ReactTourProvider.` It's just a custom Redux provider where tour is storing its state. This will let you integrate user interactions with the tour, for example waiting for user to take an action before showing the next tooltip.
+
+```tsx
+const MyApp = () => {
+  return (
+    <ReactTourProvider> /* wrap in ReactTourProvider */
+      <ReduxProvider store={store}>
+        <AppLayout />
+      </ReduxProvider>
+    </ReactTourProvider>
+  );
+};
+```
+
 ## Development
 
 1. Run `yarn` to install all dependencies
