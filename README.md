@@ -4,7 +4,7 @@ _Simple, interactive tour component for React._
 
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
-<img src="preview.gif" width="300" />
+<img src="preview.gif" width="400" />
 
 # Installation
 
