@@ -31,6 +31,7 @@ Or Yarn:
 1. Wrap your app in `ReactTourProvider.` It's just a custom Redux provider where tour is storing its state. This will let you integrate user interactions with the tour, for example waiting for user to take an action before showing the next tooltip.
 
 ```ts
+// components/MyApp.tsx
 const MyApp = () => {
   return (
     <ReactTourProvider>
@@ -40,6 +41,31 @@ const MyApp = () => {
     </ReactTourProvider>
   );
 };
+```
+
+2. Create a `TourContainer` component. It will take care of rendering the tour, and it will be a place to put all tour-related code. For now, we'll keep it empty, but we'll come back to it and add code.
+
+```ts
+// components/TourContainer.tsx
+const TourContainer = () => {
+  return null; // For now, just return null.
+};
+```
+
+Don't forget to include this file somewhere in your app layout:
+
+```ts
+// components/AppLayout.tsx
+const AppLayout = () => {
+  return (
+    <>
+      <Sidebar />
+      <Main />
+
+      <TourContainer />
+    </>
+  );
+}
 ```
 
 ## Development
