@@ -72,29 +72,31 @@ const AppLayout = () => {
 }
 ```
 
-### Add an enum with your element IDs
+### 3. Add an enum with your element IDs
 
 You'll store all element IDs (used by tour) in one place - to prevent typos. Add this at top of your tour container:
 
 ```ts
 // components/TourContainer.tsx
 export enum TourElementIds {
+  PROJECTS_LIST = "ProjectsList",
+  PROJECTS_TITLE = "ProjectsTitle",
   CREATE_PROJECT_BUTTON = "CreateProjectButton",
 }
 ```
 
-In this example, we're gonna pretend there is a button to create project, and we'll want to show the tooltip right next to it.
+In this example, we're gonna pretend there is a title and a button, and we'll want to show tooltips next to these elements.
 
-### Use your newly-added element ID in your app
+### 4. Use your newly-added element IDs in your app
 
-Reference this element ID in your real UI:
+Reference the new element IDs in your real UI:
 
 ```ts
 // components/ProjectsList.tsx
 const ProjectsList = () => {
   return (
-    <div>
-      <h2>Projects list</h2>
+    <div id={TourElementIds.PROJECTS_LIST}>
+      <h2 id={TourElementIds.PROJECTS_TITLE}>Projects list</h2>
 
       <button id={TourElementIds.CREATE_PROJECT_BUTTON}>Create new project</button>
 
@@ -106,23 +108,47 @@ const ProjectsList = () => {
 };
 ```
 
-### Add the first story to your tour
+### 5. Add the first story to your tour
+
+Now it's time to create the first story. Each story is a sequence of steps explaining a different use case.
+
+In this case, we'll create a story called `projectsStory`, which won't do anything, only say hi to user.
+
+Add this to your `TourContainer`:
+
+```ts
+// components/TourContainer.tsx
+
+import {ReactStory, TourModalPosition} from "@thinknum/react-tour";
+
+const projectsStory: ReactStory = {
+  // Tour will only show once `starterElement` is added to DOM.
+  starterElement: "#" + TourElementIds.PROJECTS_LIST,
+  steps: [{
+    target: "#" + TourElementIds.PROJECTS_TITLE,
+    title: "Welcome to Projects List!",
+    titleEmoji: "👋",
+    content: "Would you like to learn how to use this UI?",
+    position: TourModalPosition.RIGHT_CENTER,
+    // By setting this to true, the tour won't wait for user to interact with your
+    // UI. In the next step, we'll learn how to wait for interaction.
+    canProceedWithoutInteraction: true,
+  }]
+};
+```
+
+This story waits for `PROJETS_LIST` element to get mounted, and once it does, it shows a welcome message next to `PROJETS_TITLE` element.
+
+### 6. Adding story that waits for interaction
 
 
 
-## Development
+# Credits
 
-1. Run `yarn` to install all dependencies
-1. For development, run `yarn watch`. This will watch TypeScript source files, and automatically update generated files in `lib/`.
-1. To use in another project, use `yarn link`.
-    1. First, run `yarn link` in this repository, to register it as linkable module.
-    1. Then, in your target repository, run `yarn link @thinknum/react-tour`, to use not version from NPM, but instead a live development version.
-1. To unlink use `yarn unlink @thinknum/react-tour` in your project and reinstall your node_modules.
+React Tour was created to help with user onboarding in [Thinknum](https://thinknum.com), the leading provider of alternative financial data. It is also used in [KgBase](https://kgbase.com), the collaborative, versioned knowledge graph database.
 
-## Publishing
+Contributors:
 
-1. To publish a new version, first make sure that your repository is clean.
-1. Make sure you're on the `master` branch and your changes are pushed to the origin (`git push origin master`)
-1. Bump version by running `npm version patch`. This will bump the last number in version (for example from `0.0.1` to `0.0.2`). This will also create a new commit with version bump.
-1. To publish your new version to NPM, run `npm publish`.
-1. To use latest version in your project use `yarn upgrade --latest @thinknum/react-tour`
+- Lukas Prokein
+- Vojtech Rinik
+- Philip Litassy - graphic design
