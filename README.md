@@ -28,7 +28,7 @@ Or Yarn:
 
 # Adding tour to your project
 
-## 1. Wrap your app in `ReactTourProvider`
+### 1. Wrap your app in `ReactTourProvider`
 
 It's just a custom Redux provider where tour is storing its state. This will let you integrate user interactions with the tour, for example waiting for user to take an action before showing the next tooltip.
 
@@ -45,7 +45,7 @@ const MyApp = () => {
 };
 ```
 
-## Create a `TourContainer` component
+### 2. Create a `TourContainer` component
 
 It will take care of rendering the tour, and it will be a place to put all tour-related code. For now, we'll keep it empty, but we'll come back to it and add code.
 
