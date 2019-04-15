@@ -72,6 +72,44 @@ const AppLayout = () => {
 }
 ```
 
+### Add an enum with your element IDs
+
+You'll store all element IDs (used by tour) in one place - to prevent typos. Add this at top of your tour container:
+
+```ts
+// components/TourContainer.tsx
+export enum TourElementIds {
+  CREATE_PROJECT_BUTTON = "CreateProjectButton",
+}
+```
+
+In this example, we're gonna pretend there is a button to create project, and we'll want to show the tooltip right next to it.
+
+### Use your newly-added element ID in your app
+
+Reference this element ID in your real UI:
+
+```ts
+// components/ProjectsList.tsx
+const ProjectsList = () => {
+  return (
+    <div>
+      <h2>Projects list</h2>
+
+      <button id={TourElementIds.CREATE_PROJECT_BUTTON}>Create new project</button>
+
+      <ul>
+        {/* ... */}
+      </ul>
+    </div>
+  );
+};
+```
+
+### Add the first story to your tour
+
+
+
 ## Development
 
 1. Run `yarn` to install all dependencies
