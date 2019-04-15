@@ -29,11 +29,11 @@ Or Yarn:
 ```tsx
 const MyApp = () => {
   return (
-    <ReactTourProvider> /* wrap in ReactTourProvider */
+    <ReactTourProvider> {/* <- added here */}
       <ReduxProvider store={store}>
         <AppLayout />
       </ReduxProvider>
-    </ReactTourProvider>
+    </ReactTourProvider> {/* <- added here */}
   );
 };
 ```
