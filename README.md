@@ -4,6 +4,10 @@ _Simple, interactive tour component for React._
 
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
+## About
+
+React Tour helps you add an interactive tour to your product. **It waits for user to complete certain action** before showing the next tooltip. Optionally, you can opt into interaction simulation - so user doesn't have to do anything, only watch.
+
 <img src="preview.gif" width="400" />
 
 # Installation
