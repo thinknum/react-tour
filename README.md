@@ -26,14 +26,14 @@ Or Yarn:
 
 1. Wrap your app in `ReactTourProvider.` It's just a custom Redux provider where tour is storing its state. This will let you integrate user interactions with the tour, for example waiting for user to take an action before showing the next tooltip.
 
-```tsx
+```ts
 const MyApp = () => {
   return (
-    <ReactTourProvider> {/* <- added here */}
+    <ReactTourProvider>
       <ReduxProvider store={store}>
         <AppLayout />
       </ReduxProvider>
-    </ReactTourProvider> {/* <- added here */}
+    </ReactTourProvider>
   );
 };
 ```
