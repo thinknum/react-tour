@@ -1,6 +1,20 @@
 # React Tour
 
+_Simple, interactive tour component for React._
 
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+
+<img src="preview.gif" width="300" />
+
+# Installation
+
+Use npm:
+
+`npm install @thinknum/react-tour`
+
+Or Yarn:
+
+`yarn add @thinknum/react-tour`.
 
 ## Development
 
