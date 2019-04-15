@@ -93,7 +93,7 @@ Reference the new element IDs in your real UI:
 
 ```ts
 // components/ProjectsList.tsx
-const ProjectsList = () => {
+export const ProjectsList = () => {
   return (
     <div id={TourElementIds.PROJECTS_LIST}>
       <h2 id={TourElementIds.PROJECTS_TITLE}>Projects list</h2>
@@ -110,9 +110,7 @@ const ProjectsList = () => {
 
 ### 5. Add the first story to your tour
 
-Now it's time to create the first story. Each story is a sequence of steps explaining a different use case.
-
-In this case, we'll create a story called `projectsStory`, which won't do anything, only say hi to user.
+Now it's time to create the first story. Each story is a sequence of steps explaining a different use case. In this case, we'll create a story called `projectsStory`, which won't do anything, only say hi to user.
 
 Add this to your `TourContainer`:
 
@@ -139,9 +137,96 @@ const projectsStory: ReactStory = {
 
 This story waits for `PROJETS_LIST` element to get mounted, and once it does, it shows a welcome message next to `PROJETS_TITLE` element.
 
-### 6. Adding story that waits for interaction
+### 6. Create interaction keys enum
 
+Just like we added enum for element IDs, we'll add an enum that will hold all possible interactions in the UI that could affect the tour.
 
+In this example, we'll add interaction called `PROJECT_CREATED` that will be fired each time user creates a new project:
+
+```ts
+// components/TourContainer.tsx
+export enum TourInteractionKeys {
+  PROJECT_CREATED = "ProjectCreated",
+}
+```
+
+### 7. Fire interactions from the UI
+
+Now we need to make sure the tour gets notified each time user performs one of the interactions specified above. To do that, we'll wrap our component with the `withTourActionsDispatcher` HOC, and then we'll call function `actionStarted` each time user performs the interaction.
+
+```ts
+// components/ProjectsList.tsx
+import {withTourActionsDispatcher, ITourActionsHandlers} from "@thinknum/react-tour";
+import {TourInteractionKeys} from "components/TourContainer";
+
+type TemplateProps = ITourActionsHandlers;
+
+const Template: React.SFC<TemplateProps> = (props) => {
+  return (
+    <div id={TourElementIds.PROJECTS_LIST}>
+      <h2 id={TourElementIds.PROJECTS_TITLE}>Projects list</h2>
+
+      <button
+        id={TourElementIds.CREATE_PROJECT_BUTTON}
+        onClick={() => {
+          // Call real handler here - create the project
+          props.actionStarted(TourInteractionKeys.PROJECT_CREATED);
+        }}
+      >
+        Create new project
+      </button>
+
+      <ul>
+        {/* ... */}
+      </ul>
+    </div>
+  );
+};
+
+export const ProjectsList = withTourActionsDispatcher(Template);
+```
+
+Calling `actionStarted` won't do anything yet. We'll have to handle it in our story.
+
+### 8. Adding story that waits for interaction
+
+Let's now update the story we have. Let's **prompt the user to click the button**, and once they click it, let's **show a "good job" message**. To do this, we'll add 2 new steps to our existing story:
+
+```ts
+const projectsStory: ReactStory = {
+  // Tour will only show once `starterElement` is added to DOM.
+  starterElement: "#" + TourElementIds.PROJECTS_LIST,
+  steps: [{
+    /* ... welcome step we added previously ... */
+  }, {
+    target: "#" + TourElementIds.CREATE_PROJECT_BUTTON,
+    title: "Create your first project",
+    titleEmoji: "✍️",
+    content: "Click on the button to create your first project",
+    position: TourModalPosition.RIGHT_CENTER,
+    // Notice we changed this to false
+    canProceedWithoutInteraction: false,
+    // If your interaction is more than just 1 step, you can add
+    // `interactionStartKey` and `interactionEndKey`
+    // On start, the tooltip will hide, and on end, it will show
+    // again with the next step.
+    interactionStartKey: TourInteractionKeys.PROJECT_CREATED,
+    interactionEndKey: TourInteractionKeys.PROJECT_CREATED,
+  }, {
+    target: "#" + TourElementIds.CREATE_PROJECT_BUTTON,
+    title: "Good job",
+    titleEmoji: "🤘",
+    content: "You just created your first project!",
+    position: TourModalPosition.RIGHT_CENTER,
+    // We set this to true again, and the tour will end here.
+    canProceedWithoutInteraction: true,
+  }]
+};
+```
+
+### 9. Wrapping up
+
+Once you've created your first story, it should be easy to continue and add more. Use `interactionStartKey` and `interactionEndKey` to make those tooltips shows up exactly at the right time during user interaction.
 
 # Credits
 
@@ -152,3 +237,7 @@ Contributors:
 - Lukas Prokein
 - Vojtech Rinik
 - Philip Litassy - graphic design
+
+# Contributing
+
+We don't have an official guide to contributing yet, but all PRs are welcome.
