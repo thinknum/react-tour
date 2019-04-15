@@ -2,6 +2,8 @@
 
 _Simple, interactive tour component for React._
 
+![license](https://img.shields.io/github/license/thinknum/react-tour.svg)
+![last-commit](https://img.shields.io/github/last-commit/thinknum/react-tour/master.svg)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 ## About
@@ -21,6 +23,7 @@ Or Yarn:
 `yarn add @thinknum/react-tour`.
 
 **Note: React Tour currently requires `react-redux` at version 6, as it relies on custom stores using store key. (See [this issue](https://github.com/reduxjs/react-redux/issues/1132) in react-redux.) We're working on resolving this, pull-requests are welcome.**
+
 
 # Adding tour to your project
 
