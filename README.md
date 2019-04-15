@@ -4,6 +4,7 @@ _Simple, interactive tour component for React._
 
 ![license](https://img.shields.io/github/license/thinknum/react-tour.svg)
 ![last-commit](https://img.shields.io/github/last-commit/thinknum/react-tour/master.svg)
+![typescript](https://shields-staging.herokuapp.com/npm/types/@thinknum/react-tour.svg)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 ## About
