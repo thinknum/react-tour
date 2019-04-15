@@ -193,8 +193,9 @@ Calling `actionStarted` won't do anything yet. We'll have to handle it in our st
 Let's now update the story we have. Let's **prompt the user to click the button**, and once they click it, let's **show a "good job" message**. To do this, we'll add 2 new steps to our existing story:
 
 ```ts
+// components/TourContainer.tsx
+
 const projectsStory: ReactStory = {
-  // Tour will only show once `starterElement` is added to DOM.
   starterElement: "#" + TourElementIds.PROJECTS_LIST,
   steps: [{
     /* ... welcome step we added previously ... */
