@@ -235,9 +235,9 @@ React Tour was created to help with user onboarding in [Thinknum](https://thinkn
 
 Contributors:
 
-- Lukas Prokein
-- Vojtech Rinik
+- Lukas Prokein - code
 - Philip Litassy - graphic design
+- Vojtech Rinik - documentation
 
 # Contributing
 
