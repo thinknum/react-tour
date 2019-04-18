@@ -33,9 +33,11 @@
   opacity: 0;
   transition: opacity 0.3s ease-out, transform 0.5s ease-out;
   will-change: opacity, transform;
+  pointer-events: none;
 
   &.isVisible {
     opacity: 1;
+    pointer-events: all;
   }
 
   .arrow {
