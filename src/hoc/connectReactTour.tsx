@@ -6,24 +6,21 @@ export interface DispatchProps {
   dispatch: Dispatch<Action>;
 }
 
-export function connectReactTour<Props, OuterProps>(
-  mapStateToProps: (state: IState, props: OuterProps) => Props,
+export function connectReactTour<MappedProps, OuterProps>(
+  mapStateToProps: ((state: IState, props: OuterProps) => MappedProps) | undefined,
 ) {
-  return (Comp: React.ComponentType<Props & OuterProps & DispatchProps>) => {
+  return (Comp: React.ComponentType<MappedProps & OuterProps & DispatchProps>) => {
     return class WithReactTourConsumer extends React.Component<OuterProps> {
       public render() {
         return (
           <ReactTourConsumer>
             {(value) => {
+              const mappedProps: MappedProps = mapStateToProps
+                ? mapStateToProps(value.state, this.props)
+                : ({} as MappedProps);
               const {dispatch} = value;
 
-              return (
-                <Comp
-                  {...this.props}
-                  {...mapStateToProps(value.state, this.props)}
-                  dispatch={dispatch}
-                />
-              );
+              return <Comp {...this.props} {...mappedProps} dispatch={dispatch} />;
             }}
           </ReactTourConsumer>
         );

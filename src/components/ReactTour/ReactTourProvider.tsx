@@ -2,9 +2,13 @@ import React, {useReducer, Dispatch} from "react";
 import {initialState, reducer} from "state/reactTour/reducer";
 import {IState, Action} from "state/reactTour/types";
 
-console.log("hoho provider lives!");
-
 // Debugging setup
+
+enum Environment {
+  PRODUCTION = "production",
+  DEVELOPMENT = "development",
+}
+const environment = process.env.NODE_ENV as Environment;
 
 const defaultValue = {
   state: initialState,
@@ -22,9 +26,17 @@ const ReactTourContext = React.createContext<{state: IState; dispatch: Dispatch<
 export const ReactTourProvider: React.FC = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const value = {state, dispatch};
+  const dispatchWithLog: Dispatch<Action> = (action) => {
+    if (environment === Environment.DEVELOPMENT) {
+      console.groupCollapsed(`%c Tour Action: [${action.type}]`, "color: blue;");
+      console.log(action);
+      console.groupEnd();
+    }
 
-  console.log("provider value:", value);
+    dispatch(action);
+  };
+
+  const value = {state, dispatch: dispatchWithLog};
 
   return <ReactTourContext.Provider value={value}>{props.children}</ReactTourContext.Provider>;
 };
