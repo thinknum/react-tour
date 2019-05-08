@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Dispatch, useReducer} from "react";
 import {initialState, reducer} from "state/reactTour/reducer";
-import {Action, IState} from "state/reactTour/types";
+import {Action, IState} from "../../state/reactTour/types";
 
 // Debugging setup
 

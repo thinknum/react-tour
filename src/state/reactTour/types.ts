@@ -1,4 +1,4 @@
-import {ReactStoryStep} from "components/ReactTour/types";
+import {ReactStoryStep} from "../../components/ReactTour/types";
 
 /* Types
 -------------------------------------------------------------------------*/
