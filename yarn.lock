@@ -30,18 +30,11 @@
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.2.tgz#690a1475b84f2a884fd07cd797c00f5f31356ea8"
 
-"@types/react-dom@16.8.3":
-  version "16.8.3"
-  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.8.3.tgz#6131b7b6158bc7ed1925a3374b88b7c00481f0cb"
+"@types/react-dom@16.8.4":
+  version "16.8.4"
+  resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-16.8.4.tgz#7fb7ba368857c7aa0f4e4511c4710ca2c5a12a88"
   dependencies:
     "@types/react" "*"
-
-"@types/react-redux@^6":
-  version "6.0.14"
-  resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-6.0.14.tgz#8ffeb52c4f4d578bf74418d9aff5af7289924e4f"
-  dependencies:
-    "@types/react" "*"
-    redux "^4.0.0"
 
 "@types/react@*":
   version "16.8.10"
@@ -50,21 +43,18 @@
     "@types/prop-types" "*"
     csstype "^2.2.0"
 
-"@types/react@16.4.6":
-  version "16.4.6"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.4.6.tgz#5024957c6bcef4f02823accf5974faba2e54fada"
+"@types/react@16.8.17":
+  version "16.8.17"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.8.17.tgz#f287b76a5badb93bc9aa3f54521a3eb53d6c2374"
   dependencies:
+    "@types/prop-types" "*"
     csstype "^2.2.0"
 
-"@types/recompose@0.26.1":
-  version "0.26.1"
-  resolved "https://registry.yarnpkg.com/@types/recompose/-/recompose-0.26.1.tgz#a21c5728dea223551882b763335cb1bc641bf1d0"
+"@types/recompose@0.30.6":
+  version "0.30.6"
+  resolved "https://registry.yarnpkg.com/@types/recompose/-/recompose-0.30.6.tgz#f6ffae2008b84df916ed6633751f9287f344ea3e"
   dependencies:
     "@types/react" "*"
-
-"@types/redux-actions@2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@types/redux-actions/-/redux-actions-2.3.0.tgz#d28d7913ec86ee9e20ecb33a1fed887ecb538149"
 
 abbrev@1:
   version "1.1.1"
@@ -1341,10 +1331,6 @@ js-base64@^2.1.8:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.5.1.tgz#1efa39ef2c5f7980bb1784ade4a8af2de3291121"
 
-"js-tokens@^3.0.0 || ^4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
-
 js-tokens@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-3.0.2.tgz#9866df395102130e38f7f996bceb65443209c25b"
@@ -1498,12 +1484,6 @@ loglevelnext@^1.0.1:
   dependencies:
     es6-symbol "^3.1.1"
     object.assign "^4.1.0"
-
-loose-envify@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
-  dependencies:
-    js-tokens "^3.0.0 || ^4.0.0"
 
 loud-rejection@^1.0.0:
   version "1.6.0"
@@ -2263,13 +2243,6 @@ redent@^1.0.0:
     indent-string "^2.1.0"
     strip-indent "^1.0.1"
 
-redux@^4.0.0:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.1.tgz#436cae6cc40fbe4727689d7c8fae44808f1bfef5"
-  dependencies:
-    loose-envify "^1.4.0"
-    symbol-observable "^1.2.0"
-
 regenerate@^1.2.1:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/regenerate/-/regenerate-1.4.0.tgz#4a856ec4b56e4077c557589cae85e7a4c8869a11"
@@ -2736,10 +2709,6 @@ svgo@^1.0.0:
     stable "^0.1.8"
     unquote "~1.1.1"
     util.promisify "~1.0.0"
-
-symbol-observable@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"
 
 tapable@^1.0.0:
   version "1.1.1"
