@@ -214,8 +214,6 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
   // Navigation handlers
 
   private startTour() {
-    console.log("%c starting the tour!", "background: violet");
-
     const {story, dispatch} = this.props;
     const {startDelay, steps} = story;
     dispatch(Actions.setSteps({steps}));
