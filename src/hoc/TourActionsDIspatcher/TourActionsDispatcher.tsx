@@ -1,5 +1,5 @@
 import {ReactTourConsumer} from "components/ReactTour/ReactTourProvider";
-import React from "react";
+import * as React from "react";
 import * as Actions from "state/reactTour/actions";
 
 export interface ITourActionsHandlers {

@@ -1,5 +1,6 @@
 import {ReactTourConsumer} from "components/ReactTour/ReactTourProvider";
-import React, {Dispatch} from "react";
+import * as React from "react";
+import {Dispatch} from "react";
 import {IState, Action} from "state/reactTour/types";
 
 export interface DispatchProps {
