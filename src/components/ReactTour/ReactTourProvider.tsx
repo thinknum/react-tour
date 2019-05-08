@@ -2,6 +2,8 @@ import React, {useReducer, Dispatch} from "react";
 import {initialState, reducer} from "state/reactTour/reducer";
 import {IState, Action} from "state/reactTour/types";
 
+console.log("hoho provider lives!");
+
 // Debugging setup
 
 const defaultValue = {
@@ -13,12 +15,18 @@ const defaultValue = {
   },
 };
 
-const TourContext = React.createContext<{state: IState; dispatch: Dispatch<Action>}>(defaultValue);
+const ReactTourContext = React.createContext<{state: IState; dispatch: Dispatch<Action>}>(
+  defaultValue,
+);
 
 export const ReactTourProvider: React.FC = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const value = {state, dispatch};
 
-  return <TourContext.Provider value={value}>{props.children}</TourContext.Provider>;
+  console.log("provider value:", value);
+
+  return <ReactTourContext.Provider value={value}>{props.children}</ReactTourContext.Provider>;
 };
+
+export const ReactTourConsumer = ReactTourContext.Consumer;

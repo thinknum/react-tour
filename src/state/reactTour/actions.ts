@@ -14,12 +14,12 @@ import {
 } from "./types";
 
 interface Action<Payload> {
-  type: string;
+  type: ActionType;
   payload?: Payload;
 }
 
-function createAction<A extends Action<any>>(type: ActionType) {
-  return (payload: Pick<A, "payload">) => {
+function createAction<A extends Action<any>>(type: A["type"]) {
+  return (payload: A["payload"]) => {
     return {
       type,
       payload,

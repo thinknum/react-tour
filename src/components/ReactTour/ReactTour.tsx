@@ -1,15 +1,15 @@
+import {connectReactTour, DispatchProps} from "hoc/connectReactTour";
+import {isEqual, isEqualWith} from "lodash";
+import * as React from "react";
 import * as Actions from "state/reactTour/actions";
 import * as Selectors from "state/reactTour/selectors";
 import {IState as RectTourState, TourStatus} from "state/reactTour/types";
-import {isEqualWith, isEqual} from "lodash";
-import * as React from "react";
-import {compose, setDisplayName} from "recompose";
 import {AutomatedGuide} from "./AutomatedGuide";
 import {
-  getElementBySelector,
-  getRectOfElementBySelector,
-  getObjectFromClientRect,
   areStepsEqual,
+  getElementBySelector,
+  getObjectFromClientRect,
+  getRectOfElementBySelector,
 } from "./helpers";
 import {MinimizedView} from "./MinimizedView";
 import {Portal} from "./Portal";
@@ -36,35 +36,28 @@ interface IReduxProps {
   eventsKeys: Set<string>;
 }
 
-// const mapStateToProps = (state: RectTourState, props: IOuterProps): IReduxProps => {
-//   const currentStepIdx = Selectors.getCurrentStepIndex(state);
-//   const currentStep = props.story.steps[currentStepIdx];
-//   const tourStatus = Selectors.getTourStatus(state);
-//   const interactionKeys = Selectors.getInteractionKeys(state);
-//   const eventsKeys = Selectors.getEventKeys(state);
+const mapStateToProps = (state: RectTourState, props: IOuterProps): IReduxProps => {
+  const currentStepIdx = Selectors.getCurrentStepIndex(state);
+  const currentStep = props.story.steps[currentStepIdx];
+  const tourStatus = Selectors.getTourStatus(state);
+  const interactionKeys = Selectors.getInteractionKeys(state);
+  const eventsKeys = Selectors.getEventKeys(state);
 
-//   return {
-//     currentStepIdx,
-//     currentStep,
-//     tourStatus,
-//     interactionKeys,
-//     eventsKeys,
-//   };
-// };
+  return {
+    currentStepIdx,
+    currentStep,
+    tourStatus,
+    interactionKeys,
+    eventsKeys,
+  };
+};
 
-// const withConnect = connect(
-//   mapStateToProps,
-//   undefined,
-//   undefined,
-//   {
-//     storeKey: STORE_KEY,
-//   },
-// );
+const withConnect = connectReactTour(mapStateToProps);
 
 /* Template
 -------------------------------------------------------------------------*/
 
-type ITemplateProps = IOuterProps & IReduxProps;
+type ITemplateProps = IOuterProps & IReduxProps & DispatchProps;
 
 interface ITemplateState {
   isWaitingForElement: boolean;
@@ -221,15 +214,17 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
   // Navigation handlers
 
   private startTour() {
-    // const {story, dispatch} = this.props;
-    // const {startDelay, steps} = story;
-    // dispatch(Actions.setSteps({steps}));
-    // const shouldWaitForEvents = (story.waitForEvents && story.waitForEvents.length > 0) || false;
-    // this.setState({isWaitingForEvent: shouldWaitForEvents});
-    // const delay = startDelay !== undefined ? startDelay : Template.defaultStartDelay;
-    // setTimeout(() => {
-    //   this.showStep(true);
-    // }, delay);
+    console.log("%c starting the tour!", "background: violet");
+
+    const {story, dispatch} = this.props;
+    const {startDelay, steps} = story;
+    dispatch(Actions.setSteps({steps}));
+    const shouldWaitForEvents = (story.waitForEvents && story.waitForEvents.length > 0) || false;
+    this.setState({isWaitingForEvent: shouldWaitForEvents});
+    const delay = startDelay !== undefined ? startDelay : Template.defaultStartDelay;
+    setTimeout(() => {
+      this.showStep(true);
+    }, delay);
   }
 
   private showStep(skipDelay?: boolean) {
@@ -272,17 +267,17 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
   }
 
   private handleNext = () => {
-    // const {story, onTourFinished, currentStepIdx, dispatch} = this.props;
-    // const {steps} = story;
-    // this.hideModal(() => {
-    //   const newStepIdx = currentStepIdx + 1;
-    //   if (newStepIdx === steps.length) {
-    //     onTourFinished();
-    //   } else {
-    //     dispatch(Actions.setStepIndex({idx: newStepIdx}));
-    //     this.showStep();
-    //   }
-    // });
+    const {story, onTourFinished, currentStepIdx, dispatch} = this.props;
+    const {steps} = story;
+    this.hideModal(() => {
+      const newStepIdx = currentStepIdx + 1;
+      if (newStepIdx === steps.length) {
+        onTourFinished();
+      } else {
+        dispatch(Actions.setStepIndex({idx: newStepIdx}));
+        this.showStep();
+      }
+    });
   };
 
   private handleSkip = () => {
@@ -294,35 +289,35 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
   };
 
   private showModal() {
-    // const {dispatch} = this.props;
-    // dispatch(Actions.show({}));
+    const {dispatch} = this.props;
+    dispatch(Actions.show({}));
   }
 
   private hideModal(completion?: () => void) {
-    // const {dispatch} = this.props;
-    // dispatch(Actions.hide({}));
-    // setTimeout(() => {
-    //   if (completion) {
-    //     completion();
-    //   }
-    // }, 800);
+    const {dispatch} = this.props;
+    dispatch(Actions.hide({}));
+    setTimeout(() => {
+      if (completion) {
+        completion();
+      }
+    }, 800);
   }
 
   private handleNextClick = () => {
-    // const {dispatch, currentStep} = this.props;
-    // if (currentStep.automatedSteps) {
-    //   dispatch(Actions.startAutomation({}));
-    //   return;
-    // }
-    // if (!this.hasNextStep()) {
-    //   this.handleNext();
-    //   return;
-    // }
-    // if (currentStep.canProceedWithoutInteraction) {
-    //   this.handleNext();
-    // } else {
-    //   dispatch(Actions.minimalize({}));
-    // }
+    const {dispatch, currentStep} = this.props;
+    if (currentStep.automatedSteps) {
+      dispatch(Actions.startAutomation({}));
+      return;
+    }
+    if (!this.hasNextStep()) {
+      this.handleNext();
+      return;
+    }
+    if (currentStep.canProceedWithoutInteraction) {
+      this.handleNext();
+    } else {
+      dispatch(Actions.minimalize({}));
+    }
   };
 
   private handleAutomationFinished = () => {
@@ -330,8 +325,8 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
   };
 
   private handleAutomationInterrupted = () => {
-    // const {dispatch} = this.props;
-    // dispatch(Actions.interruptAutomation({}));
+    const {dispatch} = this.props;
+    dispatch(Actions.interruptAutomation({}));
   };
 
   // Click listeners
@@ -347,26 +342,26 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
   }
 
   private handleDocumentClick = (ev: any) => {
-    // const {dispatch, currentStep, currentStepIdx, story, onTourFinished} = this.props;
-    // const {steps} = story;
-    // const modalElement = this.modalRef.current;
-    // if (!modalElement || !ev.target) {
-    //   return;
-    // }
-    // if (modalElement.contains(ev.target)) {
-    //   return;
-    // }
-    // const stepTargetElement = getElementBySelector(currentStep.target);
-    // if (stepTargetElement && stepTargetElement.contains(ev.target)) {
-    //   return;
-    // }
-    // if (!this.hasNextStep()) {
-    //   dispatch(Actions.finish({}));
-    //   return;
-    // }
-    // setTimeout(() => {
-    //   dispatch(Actions.minimalize({}));
-    // }, 300); // Delay to catch possible step interaction
+    const {dispatch, currentStep, currentStepIdx, story, onTourFinished} = this.props;
+    const {steps} = story;
+    const modalElement = this.modalRef.current;
+    if (!modalElement || !ev.target) {
+      return;
+    }
+    if (modalElement.contains(ev.target)) {
+      return;
+    }
+    const stepTargetElement = getElementBySelector(currentStep.target);
+    if (stepTargetElement && stepTargetElement.contains(ev.target)) {
+      return;
+    }
+    if (!this.hasNextStep()) {
+      dispatch(Actions.finish({}));
+      return;
+    }
+    setTimeout(() => {
+      dispatch(Actions.minimalize({}));
+    }, 300); // Delay to catch possible step interaction
   };
 
   // Helpers
@@ -425,9 +420,4 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 /* Compose
 -------------------------------------------------------------------------*/
 
-export const ReactTour: React.ComponentClass<IOuterProps> = compose<{}, IOuterProps>()(Template);
-
-// export const ReactTour: React.ComponentClass<IOuterProps> = compose<ITemplateProps, IOuterProps>(
-//   withConnect,
-//   setDisplayName("ReactTour"),
-// )(Template);
+export const ReactTour = withConnect(Template);
