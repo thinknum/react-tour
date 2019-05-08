@@ -13,9 +13,7 @@ const environment = process.env.NODE_ENV as Environment;
 const defaultValue = {
   state: initialState,
   dispatch: () => {
-    throw new Error(
-      "defalt dispatch called, did you forget to wrap your app in ReactTourProvider?",
-    );
+    // ignore call to dispatch when component is not wrapped
   },
 };
 
