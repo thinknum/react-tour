@@ -40,8 +40,8 @@
     "classnames": "*",
     "lodash": "*",
     "prop-types": "*",
-    "react": "*",
-    "react-dom": "*",
+    "react": "^16.8",
+    "react-dom": "^16.8",
     "recompose": "*"
   }
 }
