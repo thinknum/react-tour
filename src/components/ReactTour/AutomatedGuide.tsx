@@ -19,6 +19,7 @@ import {
   TypingAutomatedEvent,
   WaitAutomatedEvent,
 } from "./types";
+import {connectReactTour, DispatchProps} from "hoc/connectReactTour";
 
 const setNativeValue = (element: any, value: any) => {
   const valueSetter = (Object as any).getOwnPropertyDescriptor(element, "value").set;
@@ -62,7 +63,7 @@ interface IReduxProps {
   eventsKeys: Set<string>;
 }
 
-const mapStateToProps = (state: RectTourState, props: IOuterProps): IReduxProps => {
+const mapStateToProps = (state: RectTourState): IReduxProps => {
   const eventsKeys = Selectors.getEventKeys(state);
 
   return {
@@ -70,14 +71,7 @@ const mapStateToProps = (state: RectTourState, props: IOuterProps): IReduxProps 
   };
 };
 
-// const withConnect = connect(
-//   mapStateToProps,
-//   undefined,
-//   undefined,
-//   {
-//     storeKey: STORE_KEY,
-//   },
-// );
+const withConnect = connectReactTour(mapStateToProps);
 
 /* Template
 -------------------------------------------------------------------------*/
@@ -90,7 +84,7 @@ interface ITemplateState {
   waitEventTryAgainCounter: number;
 }
 
-type ITemplateProps = IOuterProps & IReduxProps;
+type ITemplateProps = IOuterProps & IReduxProps & DispatchProps;
 
 class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
   // Properties
@@ -325,10 +319,10 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
   }
 
   private simulateRemoveKeyEvent(event: RemoveEventAutomatedEvent) {
-    // const {dispatch} = this.props;
-    // const {keyToRemove} = event;
-    // dispatch(ReactTourActions.removeEvent({eventKey: keyToRemove}));
-    // this.stepExecutionFinished();
+    const {dispatch} = this.props;
+    const {keyToRemove} = event;
+    dispatch(ReactTourActions.removeEvent({eventKey: keyToRemove}));
+    this.stepExecutionFinished();
   }
 
   private simulateTypingEvent(event: TypingAutomatedEvent) {
@@ -504,5 +498,5 @@ export const AutomatedGuide: React.ComponentClass<IOuterProps> = compose<
   IOuterProps
 >(
   setDisplayName("AutomatedGuide"),
-  // withConnect,
+  withConnect,
 )(Template);
