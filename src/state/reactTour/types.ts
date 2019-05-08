@@ -24,7 +24,7 @@ export interface IState {
   status: TourStatus;
 }
 
-/* Action types
+/* Actions
 -------------------------------------------------------------------------*/
 
 export enum ActionType {
@@ -41,27 +41,74 @@ export enum ActionType {
   INTERRUPT_AUTOMATION = "React Tour - Interrupt Automation",
 }
 
-/* Action payloads
--------------------------------------------------------------------------*/
-
-export interface ISetStepsPayload {
-  steps: ReactStoryStep[];
+export interface ISetStepsAction {
+  type: ActionType.SET_STEPS;
+  payload: {
+    steps: ReactStoryStep[];
+  };
 }
 
-export interface ISetStepIdxPayload {
-  idx: number;
+export interface ISetStepIdxAction {
+  type: ActionType.SET_STEP_IDX;
+  payload: {
+    idx: number;
+  };
 }
 
-export interface IAddInteractionPayload {
-  interactionKey: string;
+export interface IAddInteractionAction {
+  type: ActionType.ADD_INTERACTION;
+  payload: {
+    interactionKey: string;
+  };
 }
 
-export interface IAddEventPayload {
-  eventKey: string;
+export interface IAddEventAction {
+  type: ActionType.ADD_EVENT;
+  payload: {
+    eventKey: string;
+  };
 }
 
-export interface IRemoveEventPayload {
-  eventKey: string;
+export interface IRemoveEventAction {
+  type: ActionType.REMOVE_EVENT;
+  payload: {
+    eventKey: string;
+  };
 }
 
-export interface IEmptyPayload {}
+export interface IMinimalizeAction {
+  type: ActionType.MINIMALIZE;
+}
+
+export interface IShowAction {
+  type: ActionType.SHOW;
+}
+
+export interface IHideAction {
+  type: ActionType.HIDE;
+}
+
+export interface IFinishAction {
+  type: ActionType.FINISH;
+}
+
+export interface IStartAutomationAction {
+  type: ActionType.START_AUTOMATION;
+}
+
+export interface IInterruptAutomationAction {
+  type: ActionType.INTERRUPT_AUTOMATION;
+}
+
+export type Action =
+  | ISetStepsAction
+  | ISetStepIdxAction
+  | IAddInteractionAction
+  | IAddEventAction
+  | IRemoveEventAction
+  | IMinimalizeAction
+  | IShowAction
+  | IHideAction
+  | IFinishAction
+  | IStartAutomationAction
+  | IInterruptAutomationAction;

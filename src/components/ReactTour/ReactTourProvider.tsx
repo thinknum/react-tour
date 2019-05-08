@@ -1,43 +1,42 @@
-import * as React from "react";
-import {createProvider} from "react-redux";
-import {applyMiddleware, compose, createStore, Middleware} from "redux";
+import React, {useReducer, Dispatch} from "react";
 import {initialState, reducer} from "state/reactTour/reducer";
+import {IState, Action} from "state/reactTour/types";
 
 // Debugging setup
-
-const environment = process.env.NODE_ENV as Environment;
-const REDUX_DEVTOOLS_COMPOSE = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
 
 enum Environment {
   PRODUCTION = "production",
   DEVELOPMENT = "development",
 }
+const environment = process.env.NODE_ENV as Environment;
 
-const ENHANCER_COMPOSERS = {
-  [Environment.PRODUCTION]: compose,
-  [Environment.DEVELOPMENT]: REDUX_DEVTOOLS_COMPOSE || compose,
+const defaultValue = {
+  state: initialState,
+  dispatch: () => {
+    // ignore call to dispatch when component is not wrapped
+  },
 };
-const composeEnhancers = ENHANCER_COMPOSERS[environment];
 
-const allMiddlewares: Middleware[] = [];
-if (environment === Environment.DEVELOPMENT) {
-  const {createLogger} = require("redux-logger");
-  allMiddlewares.push(
-    createLogger({
-      collapsed: true,
-      timestamp: false,
-      colors: {
-        title: (action: any) => "blue",
-      },
-    }),
-  );
-}
+const ReactTourContext = React.createContext<{state: IState; dispatch: Dispatch<Action>}>(
+  defaultValue,
+);
 
-// End debugging setup
+export const ReactTourProvider: React.FC = (props) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-export const STORE_KEY = "reactTourStore";
-const Provider = createProvider(STORE_KEY);
+  const dispatchWithLog: Dispatch<Action> = (action) => {
+    if (environment === Environment.DEVELOPMENT) {
+      console.groupCollapsed(`%c Tour Action: [${action.type}]`, "color: blue;");
+      console.log(action);
+      console.groupEnd();
+    }
 
-const store = createStore(reducer, initialState, composeEnhancers(applyMiddleware(...allMiddlewares)));
+    dispatch(action);
+  };
 
-export const ReactTourProvider: React.SFC = (props) => <Provider store={store}>{props.children}</Provider>;
+  const value = {state, dispatch: dispatchWithLog};
+
+  return <ReactTourContext.Provider value={value}>{props.children}</ReactTourContext.Provider>;
+};
+
+export const ReactTourConsumer = ReactTourContext.Consumer;

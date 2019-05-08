@@ -1,15 +1,18 @@
+import {connectReactTour, DispatchProps} from "hoc/connectReactTour";
+import {isEqual, isEqualWith} from "lodash";
+import * as React from "react";
 import * as Actions from "state/reactTour/actions";
 import * as Selectors from "state/reactTour/selectors";
 import {IState as RectTourState, TourStatus} from "state/reactTour/types";
-import {isEqualWith, isEqual} from "lodash";
-import * as React from "react";
-import {connect, DispatchProp} from "react-redux";
-import {compose, setDisplayName} from "recompose";
 import {AutomatedGuide} from "./AutomatedGuide";
-import {getElementBySelector, getRectOfElementBySelector, getObjectFromClientRect, areStepsEqual} from "./helpers";
+import {
+  areStepsEqual,
+  getElementBySelector,
+  getObjectFromClientRect,
+  getRectOfElementBySelector,
+} from "./helpers";
 import {MinimizedView} from "./MinimizedView";
 import {Portal} from "./Portal";
-import {STORE_KEY} from "./ReactTourProvider";
 import {TourModal} from "./TourModal";
 import {ReactStory, ReactStoryStep} from "./types";
 
@@ -49,19 +52,12 @@ const mapStateToProps = (state: RectTourState, props: IOuterProps): IReduxProps 
   };
 };
 
-const withConnect = connect(
-  mapStateToProps,
-  undefined,
-  undefined,
-  {
-    storeKey: STORE_KEY,
-  },
-);
+const withConnect = connectReactTour(mapStateToProps);
 
 /* Template
 -------------------------------------------------------------------------*/
 
-type ITemplateProps = IOuterProps & IReduxProps & DispatchProp<any>;
+type ITemplateProps = IOuterProps & IReduxProps & DispatchProps;
 
 interface ITemplateState {
   isWaitingForElement: boolean;
@@ -122,7 +118,10 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
       this.startTour();
     }
 
-    if (prevProps.tourStatus !== TourStatus.INTERACTION_STARTED && tourStatus === TourStatus.INTERACTION_STARTED) {
+    if (
+      prevProps.tourStatus !== TourStatus.INTERACTION_STARTED &&
+      tourStatus === TourStatus.INTERACTION_STARTED
+    ) {
       this.hideModal();
     } else if (
       prevProps.tourStatus !== TourStatus.INTERACTION_FINISHED &&
@@ -142,9 +141,15 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
       return;
     }
 
-    if (prevProps.tourStatus !== TourStatus.MODAL_VISIBLE && tourStatus === TourStatus.MODAL_VISIBLE) {
+    if (
+      prevProps.tourStatus !== TourStatus.MODAL_VISIBLE &&
+      tourStatus === TourStatus.MODAL_VISIBLE
+    ) {
       this.registerClickListener();
-    } else if (prevProps.tourStatus === TourStatus.MODAL_VISIBLE && tourStatus !== TourStatus.MODAL_VISIBLE) {
+    } else if (
+      prevProps.tourStatus === TourStatus.MODAL_VISIBLE &&
+      tourStatus !== TourStatus.MODAL_VISIBLE
+    ) {
       this.unregisterClickListener();
     }
 
@@ -298,17 +303,14 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 
   private handleNextClick = () => {
     const {dispatch, currentStep} = this.props;
-
     if (currentStep.automatedSteps) {
       dispatch(Actions.startAutomation({}));
       return;
     }
-
     if (!this.hasNextStep()) {
       this.handleNext();
       return;
     }
-
     if (currentStep.canProceedWithoutInteraction) {
       this.handleNext();
     } else {
@@ -344,21 +346,17 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
     if (!modalElement || !ev.target) {
       return;
     }
-
     if (modalElement.contains(ev.target)) {
       return;
     }
-
     const stepTargetElement = getElementBySelector(currentStep.target);
     if (stepTargetElement && stepTargetElement.contains(ev.target)) {
       return;
     }
-
     if (!this.hasNextStep()) {
       dispatch(Actions.finish({}));
       return;
     }
-
     setTimeout(() => {
       dispatch(Actions.minimalize({}));
     }, 300); // Delay to catch possible step interaction
@@ -420,7 +418,4 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 /* Compose
 -------------------------------------------------------------------------*/
 
-export const ReactTour: React.ComponentClass<IOuterProps> = compose<ITemplateProps, IOuterProps>(
-  withConnect,
-  setDisplayName("ReactTour"),
-)(Template);
+export const ReactTour = withConnect(Template);
