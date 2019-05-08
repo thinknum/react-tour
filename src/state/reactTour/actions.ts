@@ -1,14 +1,42 @@
-import {createAction} from "redux-actions";
-import * as Types from "./types";
+import {
+  ISetStepsAction,
+  ActionType,
+  IAddInteractionAction,
+  ISetStepIdxAction,
+  IAddEventAction,
+  IRemoveEventAction,
+  IMinimalizeAction,
+  IShowAction,
+  IHideAction,
+  IFinishAction,
+  IStartAutomationAction,
+  IInterruptAutomationAction,
+} from "./types";
 
-export const setSteps = createAction<Types.ISetStepsPayload>(Types.ActionType.SET_STEPS);
-export const setStepIndex = createAction<Types.ISetStepIdxPayload>(Types.ActionType.SET_STEP_IDX);
-export const addInteraction = createAction<Types.IAddInteractionPayload>(Types.ActionType.ADD_INTERACTION);
-export const addEvent = createAction<Types.IAddEventPayload>(Types.ActionType.ADD_EVENT);
-export const removeEvent = createAction<Types.IRemoveEventPayload>(Types.ActionType.REMOVE_EVENT);
-export const minimalize = createAction<Types.IEmptyPayload>(Types.ActionType.MINIMALIZE);
-export const show = createAction<Types.IEmptyPayload>(Types.ActionType.SHOW);
-export const hide = createAction<Types.IEmptyPayload>(Types.ActionType.HIDE);
-export const finish = createAction<Types.IEmptyPayload>(Types.ActionType.FINISH);
-export const startAutomation = createAction<Types.IEmptyPayload>(Types.ActionType.START_AUTOMATION);
-export const interruptAutomation = createAction<Types.IEmptyPayload>(Types.ActionType.INTERRUPT_AUTOMATION);
+interface Action<Payload> {
+  type: string;
+  payload?: Payload;
+}
+
+function createAction<A extends Action<any>>(type: ActionType) {
+  return (payload: Pick<A, "payload">) => {
+    return {
+      type,
+      payload,
+    };
+  };
+}
+
+export const setSteps = createAction<ISetStepsAction>(ActionType.SET_STEPS);
+export const setStepIndex = createAction<ISetStepIdxAction>(ActionType.SET_STEP_IDX);
+export const addInteraction = createAction<IAddInteractionAction>(ActionType.ADD_INTERACTION);
+export const addEvent = createAction<IAddEventAction>(ActionType.ADD_EVENT);
+export const removeEvent = createAction<IRemoveEventAction>(ActionType.REMOVE_EVENT);
+export const minimalize = createAction<IMinimalizeAction>(ActionType.MINIMALIZE);
+export const show = createAction<IShowAction>(ActionType.SHOW);
+export const hide = createAction<IHideAction>(ActionType.HIDE);
+export const finish = createAction<IFinishAction>(ActionType.FINISH);
+export const startAutomation = createAction<IStartAutomationAction>(ActionType.START_AUTOMATION);
+export const interruptAutomation = createAction<IInterruptAutomationAction>(
+  ActionType.INTERRUPT_AUTOMATION,
+);

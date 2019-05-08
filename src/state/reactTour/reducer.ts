@@ -1,5 +1,5 @@
 import {ReactStoryStep} from "components/ReactTour/types";
-import {Action, handleActions} from "redux-actions";
+import {Reducer} from "react";
 import * as Types from "./types";
 import {ActionType, IState, TourStatus} from "./types";
 
@@ -11,13 +11,19 @@ export const initialState: IState = {
   status: TourStatus.PREPARE_TO_SHOW,
 };
 
-const getNewStatus = (status: TourStatus, currentStep: ReactStoryStep, newSet: Set<string>): TourStatus => {
+const getNewStatus = (
+  status: TourStatus,
+  currentStep: ReactStoryStep,
+  newSet: Set<string>,
+): TourStatus => {
   if (status === TourStatus.AUTOMATION) {
     return status;
   }
 
   const hasInteractionStarted =
-    currentStep.interactionStartKey !== undefined ? newSet.has(currentStep.interactionStartKey) : false;
+    currentStep.interactionStartKey !== undefined
+      ? newSet.has(currentStep.interactionStartKey)
+      : false;
   const hasInteractionFinished =
     currentStep.interactionEndKey !== undefined ? newSet.has(currentStep.interactionEndKey) : false;
 
@@ -32,16 +38,10 @@ const getNewStatus = (status: TourStatus, currentStep: ReactStoryStep, newSet: S
   return status;
 };
 
-type Payload =
-  | Types.IAddInteractionPayload
-  | Types.ISetStepIdxPayload
-  | Types.ISetStepsPayload
-  | Types.IAddEventPayload;
-
-export const reducer = handleActions<IState, Payload>(
-  {
-    [ActionType.SET_STEPS]: (state: IState, action: Action<Types.ISetStepsPayload>): IState => {
-      const steps = action.payload!.steps;
+export const reducer: Reducer<IState, Types.Action> = (state, action) => {
+  switch (action.type) {
+    case ActionType.SET_STEPS: {
+      const steps = action.payload.steps;
 
       return {
         steps,
@@ -50,9 +50,9 @@ export const reducer = handleActions<IState, Payload>(
         eventKeys: new Set<string>(),
         status: TourStatus.PREPARE_TO_SHOW,
       };
-    },
+    }
 
-    [ActionType.SET_STEP_IDX]: (state: IState, action: Action<Types.ISetStepIdxPayload>): IState => {
+    case ActionType.SET_STEP_IDX: {
       const newIdx = action.payload!.idx;
 
       return {
@@ -60,9 +60,9 @@ export const reducer = handleActions<IState, Payload>(
         status: TourStatus.PREPARE_TO_SHOW,
         stepIdx: newIdx,
       };
-    },
+    }
 
-    [ActionType.ADD_INTERACTION]: (state: IState, action: Action<Types.IAddInteractionPayload>): IState => {
+    case ActionType.ADD_INTERACTION: {
       const currentStep = state.steps[state.stepIdx];
       if (!currentStep) {
         return state;
@@ -76,9 +76,9 @@ export const reducer = handleActions<IState, Payload>(
         tourInteractionKeys: newSet,
         status: newStatus,
       };
-    },
+    }
 
-    [ActionType.ADD_EVENT]: (state: IState, action: Action<Types.IAddEventPayload>): IState => {
+    case ActionType.ADD_EVENT: {
       const newKey = action.payload!.eventKey;
       const newSet = new Set(state.eventKeys).add(newKey);
 
@@ -86,9 +86,9 @@ export const reducer = handleActions<IState, Payload>(
         ...state,
         eventKeys: newSet,
       };
-    },
+    }
 
-    [ActionType.REMOVE_EVENT]: (state: IState, action: Action<Types.IRemoveEventPayload>): IState => {
+    case ActionType.REMOVE_EVENT: {
       const keyToRemove = action.payload!.eventKey;
       const newSet = new Set(state.eventKeys);
       newSet.delete(keyToRemove);
@@ -97,10 +97,13 @@ export const reducer = handleActions<IState, Payload>(
         ...state,
         eventKeys: newSet,
       };
-    },
+    }
 
-    [ActionType.MINIMALIZE]: (state: IState, action: Action<Types.IEmptyPayload>): IState => {
-      if (state.status === TourStatus.INTERACTION_STARTED || state.status === TourStatus.INTERACTION_FINISHED) {
+    case ActionType.MINIMALIZE: {
+      if (
+        state.status === TourStatus.INTERACTION_STARTED ||
+        state.status === TourStatus.INTERACTION_FINISHED
+      ) {
         return state;
       }
 
@@ -116,16 +119,16 @@ export const reducer = handleActions<IState, Payload>(
         ...state,
         status: TourStatus.MINIMALIZED,
       };
-    },
+    }
 
-    [ActionType.SHOW]: (state: IState, action: Action<Types.IEmptyPayload>): IState => {
+    case ActionType.SHOW: {
       return {
         ...state,
         status: TourStatus.MODAL_VISIBLE,
       };
-    },
+    }
 
-    [ActionType.HIDE]: (state: IState, action: Action<Types.IEmptyPayload>): IState => {
+    case ActionType.HIDE: {
       if (state.status === TourStatus.MODAL_VISIBLE) {
         return {
           ...state,
@@ -134,29 +137,31 @@ export const reducer = handleActions<IState, Payload>(
       } else {
         return state;
       }
-    },
+    }
 
-    [ActionType.FINISH]: (state: IState, action: Action<Types.IEmptyPayload>): IState => {
+    case ActionType.FINISH: {
       return {
         ...state,
         status: TourStatus.FINISH,
       };
-    },
+    }
 
-    [ActionType.START_AUTOMATION]: (state: IState, action: Action<Types.IEmptyPayload>): IState => {
+    case ActionType.START_AUTOMATION: {
       return {
         ...state,
         status: TourStatus.AUTOMATION,
       };
-    },
+    }
 
-    [ActionType.INTERRUPT_AUTOMATION]: (state: IState, action: Action<Types.IEmptyPayload>): IState => {
+    case ActionType.INTERRUPT_AUTOMATION: {
       return {
         ...state,
         status: TourStatus.MINIMALIZED,
         eventKeys: new Set(),
       };
-    },
-  },
-  initialState,
-);
+    }
+
+    default:
+      return state;
+  }
+};

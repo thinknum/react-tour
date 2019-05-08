@@ -12,6 +12,7 @@
 
     // ...
     "module": "es6",
+    "esModuleInterop": true,
 
     // How to resolve non-relative imports
     "baseUrl": "./src",

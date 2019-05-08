@@ -1,6 +1,4 @@
-import {STORE_KEY} from "components/ReactTour/ReactTourProvider";
 import * as PropTypes from "prop-types";
-import {connect} from "react-redux";
 import {branch, compose, getContext, mapProps, withHandlers} from "recompose";
 import * as Actions from "state/reactTour/actions";
 
@@ -14,37 +12,37 @@ export interface ITourDispatch {
   _tourDispatch: any;
 }
 
-const withConnect = connect(
-  undefined,
-  (dispatch) => {
-    return {
-      _tourDispatch: dispatch,
-    };
-  },
-  undefined,
-  {
-    storeKey: STORE_KEY,
-  },
-);
+// const withConnect = connect(
+//   undefined,
+//   (dispatch) => {
+//     return {
+//       _tourDispatch: dispatch,
+//     };
+//   },
+//   undefined,
+//   {
+//     storeKey: STORE_KEY,
+//   },
+// );
 
 type IHandlersInputProps = ITourDispatch;
 
 const withStatusHandlers = withHandlers<IHandlersInputProps, ITourActionsHandlers>({
   actionStarted: ({_tourDispatch}) => (key) => {
-    _tourDispatch(Actions.addInteraction({interactionKey: key}));
+    // _tourDispatch(Actions.addInteraction({interactionKey: key}));
   },
   eventOccured: ({_tourDispatch}) => (key) => {
-    _tourDispatch(Actions.addEvent({eventKey: key}));
+    // _tourDispatch(Actions.addEvent({eventKey: key}));
   },
   minimalizeTour: ({_tourDispatch}) => () => {
-    setTimeout(() => {
-      _tourDispatch(Actions.minimalize({}));
-    }, 300);
+    // setTimeout(() => {
+    //   _tourDispatch(Actions.minimalize({}));
+    // }, 300);
   },
 });
 
 const realDispatcher = compose(
-  withConnect,
+  // withConnect,
   withStatusHandlers,
 );
 

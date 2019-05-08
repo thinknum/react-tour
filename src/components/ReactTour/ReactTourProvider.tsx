@@ -1,43 +1,24 @@
-import * as React from "react";
-import {createProvider} from "react-redux";
-import {applyMiddleware, compose, createStore, Middleware} from "redux";
+import React, {useReducer, Dispatch} from "react";
 import {initialState, reducer} from "state/reactTour/reducer";
+import {IState, Action} from "state/reactTour/types";
 
 // Debugging setup
 
-const environment = process.env.NODE_ENV as Environment;
-const REDUX_DEVTOOLS_COMPOSE = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
-
-enum Environment {
-  PRODUCTION = "production",
-  DEVELOPMENT = "development",
-}
-
-const ENHANCER_COMPOSERS = {
-  [Environment.PRODUCTION]: compose,
-  [Environment.DEVELOPMENT]: REDUX_DEVTOOLS_COMPOSE || compose,
+const defaultValue = {
+  state: initialState,
+  dispatch: () => {
+    throw new Error(
+      "defalt dispatch called, did you forget to wrap your app in ReactTourProvider?",
+    );
+  },
 };
-const composeEnhancers = ENHANCER_COMPOSERS[environment];
 
-const allMiddlewares: Middleware[] = [];
-if (environment === Environment.DEVELOPMENT) {
-  const {createLogger} = require("redux-logger");
-  allMiddlewares.push(
-    createLogger({
-      collapsed: true,
-      timestamp: false,
-      colors: {
-        title: (action: any) => "blue",
-      },
-    }),
-  );
-}
+const TourContext = React.createContext<{state: IState; dispatch: Dispatch<Action>}>(defaultValue);
 
-// End debugging setup
+export const ReactTourProvider: React.FC = (props) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-export const STORE_KEY = "reactTourStore";
-const Provider = createProvider(STORE_KEY);
+  const value = {state, dispatch};
 
-const store = createStore(reducer, initialState, composeEnhancers(applyMiddleware(...allMiddlewares)));
-
-export const ReactTourProvider: React.SFC = (props) => <Provider store={store}>{props.children}</Provider>;
+  return <TourContext.Provider value={value}>{props.children}</TourContext.Provider>;
+};

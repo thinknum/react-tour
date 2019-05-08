@@ -1,13 +1,11 @@
 import cx from "classnames";
 import {isEqual} from "lodash";
 import * as React from "react";
-import {connect, DispatchProp} from "react-redux";
 import {compose, setDisplayName} from "recompose";
 import * as ReactTourActions from "state/reactTour/actions";
 import * as Selectors from "state/reactTour/selectors";
 import {IState as RectTourState} from "state/reactTour/types";
 import {getElementBySelector, getObjectFromClientRect, getRectOfElementBySelector} from "./helpers";
-import {STORE_KEY} from "./ReactTourProvider";
 import * as styles from "./styles.scss";
 import {
   AutomatedEvent,
@@ -34,7 +32,12 @@ const setNativeValue = (element: any, value: any) => {
   }
 };
 
-const easeInOutQuad = (currentTime: number, startValue: number, changeInValue: number, duration: number) => {
+const easeInOutQuad = (
+  currentTime: number,
+  startValue: number,
+  changeInValue: number,
+  duration: number,
+) => {
   currentTime /= duration / 2;
   if (currentTime < 1) {
     return (changeInValue / 2) * currentTime * currentTime + startValue;
@@ -67,14 +70,14 @@ const mapStateToProps = (state: RectTourState, props: IOuterProps): IReduxProps 
   };
 };
 
-const withConnect = connect(
-  mapStateToProps,
-  undefined,
-  undefined,
-  {
-    storeKey: STORE_KEY,
-  },
-);
+// const withConnect = connect(
+//   mapStateToProps,
+//   undefined,
+//   undefined,
+//   {
+//     storeKey: STORE_KEY,
+//   },
+// );
 
 /* Template
 -------------------------------------------------------------------------*/
@@ -87,7 +90,7 @@ interface ITemplateState {
   waitEventTryAgainCounter: number;
 }
 
-type ITemplateProps = IOuterProps & IReduxProps & DispatchProp<any>;
+type ITemplateProps = IOuterProps & IReduxProps;
 
 class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
   // Properties
@@ -171,7 +174,10 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
     return (
       <div className={styles.AutomatedGuide} onClick={onAutomationInterrupted}>
         {isClickVisible && <div className={styles.clickEffect} style={clickPositionStyles} />}
-        <div className={cx(styles.guideCursor, {[styles.isVisible]: isCursorVisible})} style={cursorPositionStyles}>
+        <div
+          className={cx(styles.guideCursor, {[styles.isVisible]: isCursorVisible})}
+          style={cursorPositionStyles}
+        >
           <svg xmlns="http://www.w3.org/2000/svg" width="33" height="36">
             <defs>
               <filter filterUnits="userSpaceOnUse" id="a" x="0" y="0" width="33" height="36">
@@ -319,10 +325,10 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
   }
 
   private simulateRemoveKeyEvent(event: RemoveEventAutomatedEvent) {
-    const {dispatch} = this.props;
-    const {keyToRemove} = event;
-    dispatch(ReactTourActions.removeEvent({eventKey: keyToRemove}));
-    this.stepExecutionFinished();
+    // const {dispatch} = this.props;
+    // const {keyToRemove} = event;
+    // dispatch(ReactTourActions.removeEvent({eventKey: keyToRemove}));
+    // this.stepExecutionFinished();
   }
 
   private simulateTypingEvent(event: TypingAutomatedEvent) {
@@ -493,7 +499,10 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
 /* Compose
 -------------------------------------------------------------------------*/
 
-export const AutomatedGuide: React.ComponentClass<IOuterProps> = compose<ITemplateProps, IOuterProps>(
+export const AutomatedGuide: React.ComponentClass<IOuterProps> = compose<
+  ITemplateProps,
+  IOuterProps
+>(
   setDisplayName("AutomatedGuide"),
-  withConnect,
+  // withConnect,
 )(Template);
