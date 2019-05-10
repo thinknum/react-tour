@@ -2,6 +2,8 @@ import * as React from "react";
 import {Dispatch, useReducer} from "react";
 import {initialState, reducer} from "state/reactTour/reducer";
 import {Action, IState} from "../../state/reactTour/types";
+import * as Actions from "state/reactTour/actions";
+import {TourActionsHandlers} from "./types";
 
 // Debugging setup
 
@@ -11,16 +13,25 @@ enum Environment {
 }
 const environment = process.env.NODE_ENV as Environment;
 
-const defaultValue = {
+interface TourContext {
+  state: IState;
+  dispatch: Dispatch<Action>;
+  handlers: TourActionsHandlers;
+}
+
+// Default value of context - will be used when Provider isn't
+// present at the root. All calls will be quietly ignored.
+const defaultValue: TourContext = {
   state: initialState,
-  dispatch: () => {
-    // ignore call to dispatch when component is not wrapped
+  dispatch: () => {},
+  handlers: {
+    actionStarted: () => {},
+    eventOccured: () => {},
+    minimalizeTour: () => {},
   },
 };
 
-const ReactTourContext = React.createContext<{state: IState; dispatch: Dispatch<Action>}>(
-  defaultValue,
-);
+const ReactTourContext = React.createContext<TourContext>(defaultValue);
 
 export const ReactTourProvider: React.FC = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -35,7 +46,23 @@ export const ReactTourProvider: React.FC = (props) => {
     dispatch(action);
   };
 
-  const value = {state, dispatch: dispatchWithLog};
+  const value: TourContext = {
+    state,
+    dispatch: dispatchWithLog,
+    handlers: {
+      actionStarted: (key) => {
+        dispatch(Actions.addInteraction({interactionKey: key}));
+      },
+      eventOccured: (key) => {
+        dispatch(Actions.addEvent({eventKey: key}));
+      },
+      minimalizeTour: () => {
+        setTimeout(() => {
+          dispatch(Actions.minimalize({}));
+        }, 300);
+      },
+    },
+  };
 
   return <ReactTourContext.Provider value={value}>{props.children}</ReactTourContext.Provider>;
 };
