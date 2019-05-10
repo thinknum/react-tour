@@ -111,3 +111,9 @@ export enum ModalPositionSide {
   LEFT = "left",
   RIGHT = "right",
 }
+
+export interface TourActionsHandlers {
+  actionStarted: (key: string) => void;
+  eventOccured: (key: string) => void;
+  minimalizeTour: () => void;
+}
