@@ -7,5 +7,6 @@ export {
   ReactStoryStep,
   ScrollToSide,
   TourModalPosition,
+  TourActionsHandlers,
 } from "./components/ReactTour/types";
-export {ITourActionsHandlers, withTourActionsDispatcher} from "./hoc/TourActionsDispatcher/TourActionsDispatcher";
+export {withTourActionsDispatcher} from "./hoc/TourActionsDispatcher/TourActionsDispatcher";

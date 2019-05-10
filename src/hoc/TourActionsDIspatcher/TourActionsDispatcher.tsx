@@ -1,6 +1,6 @@
-import {ReactTourConsumer} from "components/ReactTour/ReactTourProvider";
 import * as React from "react";
-import {TourActionsHandlers} from "components/ReactTour/types";
+import {ReactTourConsumer} from "../../components/ReactTour/ReactTourProvider";
+import {TourActionsHandlers} from "../../components/ReactTour/types";
 
 export const withTourActionsDispatcher = (Comp: React.ComponentType<TourActionsHandlers>) => {
   return class TourActionsComp extends React.Component {
