@@ -31,40 +31,42 @@ const defaultValue: TourContext = {
   },
 };
 
-const ReactTourContext = React.createContext<TourContext>(defaultValue);
+export const ReactTourContext = React.createContext<TourContext>(defaultValue);
 
 export const ReactTourProvider: React.FC = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const dispatchWithLog: Dispatch<Action> = (action) => {
+  const dispatchWithLog = React.useRef<Dispatch<Action>>((action) => {
     if (environment === Environment.DEVELOPMENT) {
       console.groupCollapsed(`%c Tour Action: [${action.type}]`, "color: blue;");
-      console.log(action);
+      console.log("action", action);
       console.groupEnd();
     }
 
     dispatch(action);
-  };
+  });
 
-  const value: TourContext = {
+  const value = React.useRef<TourContext>({
     state,
-    dispatch: dispatchWithLog,
+    dispatch: dispatchWithLog.current!,
     handlers: {
       actionStarted: (key) => {
-        dispatch(Actions.addInteraction({interactionKey: key}));
+        dispatchWithLog.current!(Actions.addInteraction({interactionKey: key}));
       },
       eventOccured: (key) => {
-        dispatch(Actions.addEvent({eventKey: key}));
+        dispatchWithLog.current!(Actions.addEvent({eventKey: key}));
       },
       minimalizeTour: () => {
         setTimeout(() => {
-          dispatch(Actions.minimalize({}));
+          dispatchWithLog.current!(Actions.minimalize({}));
         }, 300);
       },
     },
-  };
+  });
 
-  return <ReactTourContext.Provider value={value}>{props.children}</ReactTourContext.Provider>;
+  return (
+    <ReactTourContext.Provider value={value.current!}>{props.children}</ReactTourContext.Provider>
+  );
 };
 
 export const ReactTourConsumer = ReactTourContext.Consumer;

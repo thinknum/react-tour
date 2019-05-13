@@ -65,7 +65,9 @@ export const reducer: Reducer<IState, Types.Action> = (state, action) => {
     case ActionType.ADD_INTERACTION: {
       const currentStep = state.steps[state.stepIdx];
       if (!currentStep) {
-        return state;
+        return {
+          ...state,
+        };
       }
 
       const newKey = action.payload!.interactionKey;
