@@ -1,5 +1,5 @@
 import cx from "classnames";
-import {isEqual} from "lodash";
+import isEqual from "lodash-es/isEqual";
 import * as React from "react";
 import {compose, setDisplayName} from "recompose";
 import * as ReactTourActions from "state/reactTour/actions";

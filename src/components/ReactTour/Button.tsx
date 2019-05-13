@@ -41,7 +41,7 @@ class Template extends React.PureComponent<ITemplateProps, ITemplateState> {
         onMouseEnter={this.hoverOn}
         onMouseLeave={this.hoverOff}
       >
-        <span className={styles.label}>{label}</span>
+        <span>{label}</span>
       </button>
     );
   }

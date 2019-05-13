@@ -1,5 +1,6 @@
 import {connectReactTour, DispatchProps} from "hoc/connectReactTour";
-import {isEqual, isEqualWith} from "lodash";
+import isEqual from "lodash-es/isEqual";
+import isEqualWith from "lodash-es/isEqualWith";
 import * as React from "react";
 import * as Actions from "state/reactTour/actions";
 import * as Selectors from "state/reactTour/selectors";

@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@types/classnames": "2.2.7",
-    "@types/lodash": "4.14.64",
+    "@types/lodash-es": "^4.17.0",
     "@types/node": "8.0.46",
     "@types/react": "16.8.17",
     "@types/react-dom": "16.8.4",
@@ -38,7 +38,7 @@
   "resolutions": {},
   "peerDependencies": {
     "classnames": "*",
-    "lodash": "*",
+    "lodash-es": "*",
     "prop-types": "*",
     "react": "^16.8",
     "react-dom": "^16.8",
