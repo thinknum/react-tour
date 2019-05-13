@@ -36,36 +36,53 @@ export const ReactTourContext = React.createContext<TourContext>(defaultValue);
 export const ReactTourProvider: React.FC = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const dispatchWithLog = React.useRef<Dispatch<Action>>((action) => {
-    if (environment === Environment.DEVELOPMENT) {
-      console.groupCollapsed(`%c Tour Action: [${action.type}]`, "color: blue;");
-      console.log("action", action);
-      console.groupEnd();
-    }
+  const dispatchWithLog = React.useCallback(
+    (action) => {
+      if (environment === Environment.DEVELOPMENT) {
+        console.groupCollapsed(`%c Tour Action: [${action.type}]`, "color: blue;");
+        console.log("action", action);
+        console.groupEnd();
+      }
 
-    dispatch(action);
-  });
-
-  const value = React.useRef<TourContext>({
-    state,
-    dispatch: dispatchWithLog.current!,
-    handlers: {
-      actionStarted: (key) => {
-        dispatchWithLog.current!(Actions.addInteraction({interactionKey: key}));
-      },
-      eventOccured: (key) => {
-        dispatchWithLog.current!(Actions.addEvent({eventKey: key}));
-      },
-      minimalizeTour: () => {
-        setTimeout(() => {
-          dispatchWithLog.current!(Actions.minimalize({}));
-        }, 300);
-      },
+      dispatch(action);
     },
-  });
+    [dispatch],
+  );
+
+  const actionStarted = React.useCallback(
+    (key) => {
+      dispatchWithLog(Actions.addInteraction({interactionKey: key}));
+    },
+    [dispatch],
+  );
+
+  const eventOccured = React.useCallback(
+    (key) => {
+      dispatchWithLog(Actions.addEvent({eventKey: key}));
+    },
+    [dispatch],
+  );
+
+  const minimalizeTour = React.useCallback(() => {
+    setTimeout(() => {
+      dispatchWithLog(Actions.minimalize({}));
+    }, 300);
+  }, [dispatch]);
 
   return (
-    <ReactTourContext.Provider value={value.current!}>{props.children}</ReactTourContext.Provider>
+    <ReactTourContext.Provider
+      value={{
+        dispatch: dispatchWithLog,
+        state,
+        handlers: {
+          actionStarted,
+          eventOccured,
+          minimalizeTour,
+        },
+      }}
+    >
+      {props.children}
+    </ReactTourContext.Provider>
   );
 };
 
