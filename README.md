@@ -23,9 +23,6 @@ Or Yarn:
 
 `yarn add @thinknum/react-tour`.
 
-**Note: React Tour currently requires `react-redux` at version 6, as it relies on custom stores using store key. (See [this issue](https://github.com/reduxjs/react-redux/issues/1132) in react-redux.) We're working on resolving this, pull-requests are welcome.**
-
-
 # Adding tour to your project
 
 ### 1. Wrap your app in `ReactTourProvider`
@@ -228,6 +225,42 @@ const projectsStory: ReactStory = {
 ### 9. Wrapping up
 
 Once you've created your first story, it should be easy to continue and add more. Use `interactionStartKey` and `interactionEndKey` to make those tooltips shows up exactly at the right time during user interaction.
+
+# Development
+
+To work on `react-tour` library, use [Yalc](https://github.com/whitecolor/yalc). This is to avoid issues when compiling TypeScript project which contains symlinks. (`yarn link` would use symlinks.)
+
+Before doing anything, install yalc:
+
+```
+npm install -g yalc
+```
+
+Then clone the `react-tour` repo in your filesystem. Run the build command:
+
+```
+yarn build
+```
+
+To make package available to your project, publish it using yalc:
+
+```
+yalc publish
+```
+
+In your project directory, add the package:
+
+```
+yalc add @thinknum/react-tour
+```
+
+And compile your project. Whenever you make changes in `react-tour` directory, you will need to recompile and push to yalc:
+
+```
+yarn build && yalc push
+```
+
+Notice we're using `push` instead of `publish`. By doing that, we'll not only publish on Yalc, we'll also tell any projects currently using it, to update to newest version. This way package will stay in sync with all projects where you've added it.
 
 # Credits
 
