@@ -1,9 +1,9 @@
 import * as React from "react";
-import {ReactTourConsumer, ReactTourContext} from "../../components/ReactTour/ReactTourProvider";
+import {ReactTourConsumer} from "../../components/ReactTour/ReactTourProvider";
 import {TourActionsHandlers} from "../../components/ReactTour/types";
 
-export const withTourActionsDispatcher = (Comp: React.ComponentType<TourActionsHandlers>) => {
-  return class TourActionsComp extends React.Component {
+export function withTourActionsDispatcher<T>(Comp: React.ComponentType<TourActionsHandlers & T>) {
+  return class TourActionsComp extends React.Component<T> {
     public render() {
       return (
         <ReactTourConsumer>
@@ -15,5 +15,5 @@ export const withTourActionsDispatcher = (Comp: React.ComponentType<TourActionsH
         </ReactTourConsumer>
       );
     }
-  };
-};
+  }
+}
