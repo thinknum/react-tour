@@ -15,7 +15,19 @@ React Tour helps you add an interactive tour to your product. **It waits for use
 
 # Installation
 
-Use npm:
+This package is hosted on GitHub Packages. To install it using Yarn, you will first need to create a `.npmrc` file in your project directory:
+
+```
+touch .npmrc
+```
+
+In this file, set up a custom repository URL for all packages in the `@thinknum` namespace:
+
+```
+@thinknum:registry=https://npm.pkg.github.com
+```
+
+Now you can install the package as usual:
 
 `npm install @thinknum/react-tour`
 
@@ -261,6 +273,25 @@ yarn build && yalc push
 ```
 
 Notice we're using `push` instead of `publish`. By doing that, we'll not only publish on Yalc, we'll also tell any projects currently using it, to update to newest version. This way package will stay in sync with all projects where you've added it.
+
+# Publishing
+
+This package is set up to be published on GitHub Packages. (Via `publishConfig` key in `package.json`.) In order to publish a new version, first make sure you are logged in to GitHub Packages registry:
+
+```
+npm login --registry=https://npm.pkg.github.com --scope=@github_user
+```
+
+Then you can publish as usual:
+
+```
+yarn build
+npm publish
+```
+
+Running this command will prompt you for your username. For username, enter you regular username, and for password enter a Personal Access Token generated with `write:packages` and `read:packages` scopes.
+
+Now you are logged in to GitHub Packages registry. Before publishing, update your version to the number you wish to publish. Make sure this number isn't used yet - GitHub Packages won't allow you rewriting existing published version.
 
 # Credits
 
