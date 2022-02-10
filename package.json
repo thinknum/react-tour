@@ -31,7 +31,7 @@
     "@types/react-dom": "16.8.4",
     "@types/recompose": "0.30.6",
     "awesome-typescript-loader": "^5.2.1",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "postcss-modules": "^1.4.1",
     "prettier": "^1.16.4",
     "rollup": "^1.8.0",
