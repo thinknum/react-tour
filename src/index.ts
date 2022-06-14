@@ -10,3 +10,4 @@ export {
   TourActionsHandlers,
 } from "./components/ReactTour/types";
 export {withTourActionsDispatcher} from "./hoc/TourActionsDispatcher/TourActionsDispatcher";
+export {useTourActionsDispatcher} from "./hooks/useTourActionsDispatcher";
