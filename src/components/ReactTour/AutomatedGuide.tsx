@@ -80,7 +80,7 @@ interface ITemplateState {
   currentIdx: number;
   isCursorVisible: boolean;
   isClickVisible: boolean;
-  cachedRect?: ClientRect;
+  cachedRect?: DOMRect;
   waitEventTryAgainCounter: number;
 }
 

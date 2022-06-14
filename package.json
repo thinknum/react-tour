@@ -18,37 +18,39 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
+    "clean": "rm -rf dist/",
     "build": "rollup -c",
     "watch": "rollup -cw",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.tsx\"",
-    "lint": "tslint -p tsconfig.json"
+    "lint": "tslint -p tsconfig.json",
+    "prepare": "npm run clean && npm run build"
   },
   "devDependencies": {
     "@types/classnames": "2.2.7",
-    "@types/lodash-es": "^4.17.0",
-    "@types/node": "8.0.46",
-    "@types/react": "16.8.17",
-    "@types/react-dom": "16.8.4",
+    "@types/lodash-es": "^4.17.5",
+    "@types/node": "^12.12.0",
+    "@types/react": "^16.9.35",
+    "@types/react-dom": "^16.9.8",
     "@types/recompose": "0.30.6",
     "awesome-typescript-loader": "^5.2.1",
-    "node-sass": "^4.14.1",
     "postcss-modules": "^1.4.1",
     "prettier": "^1.16.4",
-    "rollup": "^1.8.0",
-    "rollup-plugin-postcss": "^2.0.3",
-    "rollup-plugin-typescript2": "^0.20.1",
-    "ts-loader": "^5.3.3",
-    "tslint": "^5.15.0",
+    "rollup": "^2.10.4",
+    "rollup-plugin-postcss": "^3.1.1",
+    "rollup-plugin-typescript2": "^0.27.1",
+    "sass": "^1.52.3",
+    "ts-loader": "^7.0.4",
+    "tslint": "^6.0.0",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "3.4.1"
+    "typescript": "^3.9.2"
   },
   "resolutions": {},
   "peerDependencies": {
     "classnames": "*",
     "lodash-es": "*",
     "prop-types": "*",
-    "react": "^16.8",
-    "react-dom": "^16.8",
+    "react": "^16.13",
+    "react-dom": "^16.13",
     "recompose": "*"
   }
 }

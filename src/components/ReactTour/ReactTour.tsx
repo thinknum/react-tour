@@ -63,7 +63,7 @@ type ITemplateProps = IOuterProps & IReduxProps & DispatchProps;
 interface ITemplateState {
   isWaitingForElement: boolean;
   isWaitingForEvent: boolean;
-  cachedRect?: ClientRect;
+  cachedRect?: DOMRect;
 }
 
 class Template extends React.PureComponent<ITemplateProps, ITemplateState> {

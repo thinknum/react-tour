@@ -11,7 +11,9 @@
     "lib": ["es2015", "dom"],
 
     // ...
-    "module": "es6",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
 
     // How to resolve non-relative imports
     "baseUrl": "./src",
